@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/department_checklist",
+  "title": "Department Checklist",
+  "description": "Draft department checklist items derived from GSP Standard candidates and evidence matrix records via LLM semantic analysis (C6B). Each item is a verification question for department owners and auditors.",
+  "type": "object",
+  "required": [
+    "checklist_item_id",
+    "linked_gsp_standard_id",
+    "checklist_question",
+    "checklist_type",
+    "review_status",
+    "approval_status"
+  ],
+  "properties": {
+    "checklist_item_id": {
+      "type": "string",
+      "description": "C6B: Canonical checklist item ID (e.g., CL-GSP-COM-P04-SWM-001-001)."
+    },
+    "checklist_set_id": {
+      "type": "string",
+      "description": "C6B: Group identifier linking checklist items from the same generation batch."
+    },
+    "linked_gsp_standard_id": {
+      "type": "string",
+      "description": "C6B: FK to gsp_core_standard.gsp_standard_id."
+    },
+    "linked_customer_requirement_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "C6B: CRM IDs linked via the GSP standard."
+    },
+    "linked_evidence_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "C6B: Evidence matrix IDs linked to the same GSP standard."
+    },
+    "source_original_text_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "C6B: References to source_text_archive IDs."
+    },
+    "checklist_question": {
+      "type": "string",
+      "description": "C6B: The verification question or check point for the auditor/department owner."
+    },
+    "check_purpose": {
+      "type": "string",
+      "description": "C6B: Why this check is needed — what risk or requirement it addresses."
+    },
+    "check_method": {
+      "type": "string",
+      "description": "C6B: How to perform the check (e.g., 'Review records', 'Site inspection', 'Interview workers')."
+    },
+    "expected_result": {
+      "type": "string",
+      "description": "C6B: What a passing result looks like (the expected state)."
+    },
+    "required_evidence": {
+      "type": "string",
+      "description": "C6B: What evidence should be available to demonstrate compliance with this check."
+    },
+    "responsible_function": {
+      "type": "string",
+      "description": "C6B: Function accountable for this checklist item."
+    },
+    "responsible_department": {
+      "type": "string",
+      "description": "C6B: Department responsible for this checklist item."
+    },
+    "suggested_frequency": {
+      "type": "string",
+      "enum": [
+        "once", "daily", "weekly", "monthly", "quarterly", "annually",
+        "per_shift", "per_batch", "as_needed", "upon_request", "ongoing", "unknown"
+      ],
+      "description": "C6B: Suggested frequency for performing this check."
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "unknown"],
+      "description": "C6B: Risk level if this check is not performed or fails."
+    },
+    "checklist_type": {
+      "type": "string",
+      "enum": [
+        "document_check", "record_check", "site_observation",
+        "interview_check", "system_data_check", "permit_or_license_check",
+        "training_check", "equipment_or_facility_check", "supplier_check",
+        "emergency_preparedness_check", "other", "unknown"
+      ],
+      "description": "C6B: Type of check to be performed."
+    },
+    "site_scope": {
+      "type": "string",
+      "description": "C6B: Which sites/facilities this check applies to."
+    },
+    "applicability": {
+      "type": "string",
+      "description": "C6B: Conditions or exceptions for applicability."
+    },
+    "llm_reasoning_summary": {
+      "type": "string",
+      "description": "C6B: Summary of why the LLM proposed this checklist item."
+    },
+    "uncertainty_notes": {
+      "type": "string",
+      "description": "C6B: Notes about uncertainty, ambiguity, or alternative interpretations."
+    },
+    "needs_human_review": {
+      "type": "boolean",
+      "default": false,
+      "description": "C6B: True if LLM flagged uncertainty needing human verification."
+    },
+    "generation_method": {
+      "type": "string",
+      "enum": [
+        "llm_semantic_analysis",
+        "llm_semantic_analysis_mock",
+        "manual",
+        "imported"
+      ],
+      "description": "C6B: How this checklist item was generated."
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["draft_pending_review", "in_review", "confirmed", "rejected"],
+      "description": "C6B: Initial status is always draft_pending_review."
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": ["not_approved", "pending_approval", "approved"],
+      "description": "C6B: Initial status is always not_approved."
+    },
+    "generated_by": {
+      "type": "string",
+      "description": "C6B: System that generated this record."
+    },
+    "batch_id": {
+      "type": "string",
+      "description": "C6B: Batch identifier for the generation run."
+    },
+    "sample_only": {
+      "type": "boolean",
+      "default": false,
+      "description": "C6B: True if based on sample candidates."
+    },
+    "created_by": {
+      "type": "string",
+      "description": "C6B: User ID or system that created this record."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

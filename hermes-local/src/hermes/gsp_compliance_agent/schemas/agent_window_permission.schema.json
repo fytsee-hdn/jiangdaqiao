@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/agent_window_permission",
+  "title": "Agent Window Permission",
+  "description": "Defines which windows (entry points) connect to which agents, with role-based access control.",
+  "type": "object",
+  "required": [
+    "window_id",
+    "display_name",
+    "target_agent",
+    "window_type"
+  ],
+  "properties": {
+    "window_id": {
+      "type": "string",
+      "description": "Stable window identifier."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "target_agent": {
+      "type": "string",
+      "description": "agent_id of the target agent (e.g., gsp_service_agent, gsp_compliance_agent)."
+    },
+    "window_type": {
+      "type": "string",
+      "enum": [
+        "common_window",
+        "professional_window",
+        "admin_window"
+      ],
+      "description": "common_window → Service Agent. professional_window → direct to business agent. admin_window → Admin Agent."
+    },
+    "description": {
+      "type": "string"
+    },
+    "allowed_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "denied_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "default_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "routing_rule": {
+      "type": "string",
+      "enum": [
+        "direct_to_agent",
+        "through_service_agent",
+        "through_admin_agent"
+      ],
+      "description": "Only common_window uses through_service_agent. Professional windows must use direct_to_agent."
+    },
+    "requires_permission_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rate_limit_per_minute": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 30
+    },
+    "bot_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "WeChat/WCom bot names for this window."
+    }
+  },
+  "additionalProperties": false
+}

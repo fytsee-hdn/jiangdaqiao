@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/source_text_archive",
+  "title": "Source Text Archive",
+  "description": "Immutable archive of original source texts (customer standards, laws, internal policies). Never modified after ingestion. Used for audit and dispute resolution.",
+  "type": "object",
+  "required": [
+    "id",
+    "source_type",
+    "original_text",
+    "ingested_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "customer_standard",
+        "law",
+        "regulation",
+        "internal_policy",
+        "industry_standard"
+      ]
+    },
+    "document_title": {
+      "type": "string"
+    },
+    "document_version": {
+      "type": "string"
+    },
+    "issuing_body": {
+      "type": "string"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "original_text": {
+      "type": "string",
+      "description": "IMMUTABLE. Verbatim original text."
+    },
+    "original_language": {
+      "type": "string"
+    },
+    "section_ref": {
+      "type": "string"
+    },
+    "page_ref": {
+      "type": "string"
+    },
+    "file_hash_sha256": {
+      "type": "string",
+      "description": "Integrity hash of the full source file."
+    },
+    "storage_path": {
+      "type": "string"
+    },
+    "ingested_by": {
+      "type": "string"
+    },
+    "ingested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_translation": {
+      "type": "boolean",
+      "default": false
+    },
+    "translated_from_id": {
+      "type": "string",
+      "description": "FK to another source_text_archive.id if this is a translation."
+    },
+    "translator": {
+      "type": "string"
+    },
+    "translation_notes": {
+      "type": "string"
+    },
+    "translation_is_reference_only": {
+      "type": "boolean",
+      "default": true,
+      "description": "Translations are reference-only unless verified."
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

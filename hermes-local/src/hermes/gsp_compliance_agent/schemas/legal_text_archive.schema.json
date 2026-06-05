@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/legal_text_archive",
+  "title": "Legal Text Archive",
+  "description": "Immutable archive of original legal text in source language. Each record is one logical unit (article, section, row). Never modified after ingestion. All interpretations live in applicable_legal_requirement.",
+  "type": "object",
+  "required": [
+    "legal_text_id",
+    "legal_source_id",
+    "country_code",
+    "original_text",
+    "original_language",
+    "immutable"
+  ],
+  "properties": {
+    "legal_text_id": {
+      "type": "string",
+      "description": "Unique text archive ID (e.g., LT-VN-LABOUR-2019-45-A01)."
+    },
+    "legal_source_id": {
+      "type": "string",
+      "description": "FK to legal_source_register.legal_source_id."
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "jurisdiction": {
+      "type": "string"
+    },
+    "law_number": {
+      "type": "string"
+    },
+    "article_reference": {
+      "type": "string",
+      "description": "Article, clause, or section reference (e.g., 'Article 1', 'Section 3.2')."
+    },
+    "section_reference": {
+      "type": "string",
+      "description": "More specific section/sub-section reference."
+    },
+    "original_text": {
+      "type": "string",
+      "description": "IMMUTABLE verbatim legal text."
+    },
+    "original_language": {
+      "type": "string"
+    },
+    "translated_text_reference_only": {
+      "type": "string",
+      "description": "Machine or human translation — REFERENCE ONLY. Not authoritative."
+    },
+    "page_number": {
+      "type": "integer",
+      "description": "Source document page number."
+    },
+    "row_number": {
+      "type": "integer",
+      "description": "Source row number (for Excel/CSV index sources)."
+    },
+    "sheet_name": {
+      "type": "string",
+      "description": "Source sheet name (for Excel index)."
+    },
+    "text_hash": {
+      "type": "string",
+      "description": "SHA256 hash of original_text for integrity verification."
+    },
+    "immutable": {
+      "type": "boolean",
+      "const": true,
+      "description": "ALWAYS true. Text cannot be modified after ingestion."
+    },
+    "extraction_method": {
+      "type": "string",
+      "description": "e.g., 'manual_upload', 'pdf_extraction', 'curated_excel'."
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "archived",
+        "verified",
+        "superseded"
+      ],
+      "default": "archived"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

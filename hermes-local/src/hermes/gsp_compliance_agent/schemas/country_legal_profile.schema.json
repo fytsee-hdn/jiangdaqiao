@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/country_legal_profile",
+  "title": "Country Legal Profile",
+  "description": "Per-country legal configuration — jurisdiction levels, languages, legal categories, owner, review requirements. Supports Vietnam and future countries.",
+  "type": "object",
+  "required": [
+    "country_profile_id",
+    "country_code",
+    "country_name",
+    "status"
+  ],
+  "properties": {
+    "country_profile_id": {
+      "type": "string",
+      "description": "Unique profile ID (e.g., CLP-VN-001)."
+    },
+    "country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country code."
+    },
+    "country_name": {
+      "type": "string"
+    },
+    "jurisdiction_levels": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "e.g., [\"national\", \"provincial\", \"municipal\"]."
+    },
+    "official_languages": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "e.g., [\"vi\", \"en\"]."
+    },
+    "working_languages": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Languages used for internal legal analysis."
+    },
+    "legal_categories": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "e.g., [\"labour\", \"environment\", \"safety\", \"chemical\", \"quality\"]."
+    },
+    "local_legal_owner": {
+      "type": "string",
+      "description": "Person or role responsible for legal review in this country."
+    },
+    "review_required": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether legal review is required before confirmation."
+    },
+    "update_frequency": {
+      "type": "string",
+      "description": "e.g., 'quarterly', 'annually', 'on_change'."
+    },
+    "source_priority_rules": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Priority rules when sources conflict (e.g., ['law > decree > circular'])."
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "draft"
+      ],
+      "default": "draft"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

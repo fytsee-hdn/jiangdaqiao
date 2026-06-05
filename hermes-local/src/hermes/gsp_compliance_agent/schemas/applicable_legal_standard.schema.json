@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/applicable_legal_standard",
+  "title": "Applicable Legal Standard",
+  "description": "Interpreted legal requirement — the actionable form of a law after legal review. Links back to immutable legal_original_text. Marked as legal interpretation.",
+  "type": "object",
+  "required": [
+    "id",
+    "country_code",
+    "legal_text_id",
+    "interpreted_requirement",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "legal_reviewed",
+        "approved",
+        "deprecated",
+        "superseded_by_new_law"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "legal_text_id": {
+      "type": "string",
+      "description": "FK to legal_original_text.id — immutable source."
+    },
+    "law_name": {
+      "type": "string"
+    },
+    "article_ref": {
+      "type": "string"
+    },
+    "interpreted_requirement": {
+      "type": "string",
+      "description": "The actionable requirement after legal interpretation."
+    },
+    "domain_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "normative_force": {
+      "type": "string",
+      "enum": [
+        "shall",
+        "should",
+        "may"
+      ]
+    },
+    "is_legal_interpretation": {
+      "type": "boolean",
+      "default": true
+    },
+    "interpreted_by": {
+      "type": "string"
+    },
+    "interpreted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "legal_reviewed_by": {
+      "type": "string",
+      "description": "Qualified legal professional who reviewed."
+    },
+    "legal_reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "legal_review_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "reviewed",
+        "disputed",
+        "approved"
+      ]
+    },
+    "mapped_to_core": {
+      "type": "boolean",
+      "default": false
+    },
+    "core_requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "enforcement_authority": {
+      "type": "string"
+    },
+    "penalty_summary": {
+      "type": "string",
+      "description": "Summary of penalties — REFERENCE ONLY."
+    },
+    "penalty_is_reference_only": {
+      "type": "boolean",
+      "default": true
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

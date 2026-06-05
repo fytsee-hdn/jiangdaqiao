@@ -1,0 +1,16 @@
+profile: admin
+purpose: system administration and controlled operations
+allowed_entrypoints:
+  - admin_cli
+  - admin_chatbot
+admin_capabilities: true
+may_inherit_admin: false
+contains_secrets: false
+runtime_profile_root: .hermes/profiles/admin
+default_ocr_policy: shared_ocr
+allowed_actions:
+  - inspect_status
+  - read_logs
+  - run_tests
+  - backup_data
+  - controlled_operations

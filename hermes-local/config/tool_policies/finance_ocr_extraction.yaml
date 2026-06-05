@@ -1,0 +1,10 @@
+policy_id: finance_ocr_extraction
+policy_type: ocr_extraction
+profile: finance
+required_fields:
+  - invoice_number
+  - amount
+  - vendor
+  - date
+  - tax_id
+  - currency

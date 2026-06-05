@@ -1,0 +1,113 @@
+{
+  "version": "1.0.0",
+  "description": "GSP Agent Window Map — defines which windows connect to which agents.",
+  "design_principle": "common_window → GSP Service Agent. professional_window → direct to business agent. admin_window → GSP Admin Agent.",
+  "windows": [
+    {
+      "window_id": "common_window",
+      "display_name": "GSP Service Window",
+      "window_type": "common_window",
+      "target_agent": "gsp_service_agent",
+      "routing_rule": "through_service_agent",
+      "allowed_roles": [
+        "owner",
+        "admin",
+        "compliance_owner",
+        "department_owner",
+        "finance",
+        "manager",
+        "employee"
+      ],
+      "default_enabled": true,
+      "description": "Main user-facing window. All messages go through GSP Service Agent for routing.",
+      "bot_names": [
+        "GSP Service Agent",
+        "GSP Assistant",
+        "GSP助手"
+      ]
+    },
+    {
+      "window_id": "admin_window",
+      "display_name": "GSP Admin Window",
+      "window_type": "admin_window",
+      "target_agent": "gsp_admin_agent",
+      "routing_rule": "direct_to_agent",
+      "allowed_roles": [
+        "owner",
+        "admin"
+      ],
+      "denied_roles": [
+        "employee",
+        "manager",
+        "department_owner"
+      ],
+      "default_enabled": true,
+      "description": "Administrator-only window. Direct connection to Admin Agent.",
+      "bot_names": [
+        "GSP Admin Agent",
+        "Hermes Admin"
+      ]
+    },
+    {
+      "window_id": "compliance_owner_window",
+      "display_name": "GSP Compliance Owner Window",
+      "window_type": "professional_window",
+      "target_agent": "gsp_compliance_agent",
+      "routing_rule": "direct_to_agent",
+      "allowed_roles": [
+        "owner",
+        "admin",
+        "compliance_owner"
+      ],
+      "denied_roles": [
+        "employee",
+        "department_owner"
+      ],
+      "default_enabled": false,
+      "description": "Compliance owner direct window. Create/update standards, overlays, work packages.",
+      "bot_names": [
+        "GSP Compliance Agent",
+        "合规助手"
+      ]
+    },
+    {
+      "window_id": "department_compliance_window",
+      "display_name": "GSP Department Compliance Window",
+      "window_type": "professional_window",
+      "target_agent": "gsp_compliance_agent",
+      "routing_rule": "direct_to_agent",
+      "allowed_roles": [
+        "owner",
+        "admin",
+        "compliance_owner",
+        "department_owner"
+      ],
+      "default_enabled": false,
+      "description": "Department owner window. Obtain SOPs/checklists, submit daily reports, report risks.",
+      "bot_names": [
+        "GSP Department Compliance",
+        "部门合规"
+      ]
+    },
+    {
+      "window_id": "reimbursement_window",
+      "display_name": "GSP Reimbursement Window",
+      "window_type": "professional_window",
+      "target_agent": "gsp_reimbursement_agent",
+      "routing_rule": "direct_to_agent",
+      "allowed_roles": [
+        "owner",
+        "admin",
+        "finance",
+        "manager",
+        "employee"
+      ],
+      "default_enabled": false,
+      "description": "Optional direct reimbursement window.",
+      "bot_names": [
+        "GSP Reimbursement Agent",
+        "报销助手"
+      ]
+    }
+  ]
+}

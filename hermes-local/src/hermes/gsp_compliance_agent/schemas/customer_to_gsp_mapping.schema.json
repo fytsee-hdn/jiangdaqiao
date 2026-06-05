@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/customer_to_gsp_mapping",
+  "title": "Customer-to-GSP Mapping",
+  "description": "Tracks how each customer requirement maps to one or more GSP Core Standard entries, including gaps and conflicts.",
+  "type": "object",
+  "required": [
+    "id",
+    "customer_req_id",
+    "core_requirement_id",
+    "mapping_type"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "mapped",
+        "verified",
+        "conflict",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "customer_req_id": {
+      "type": "string",
+      "description": "FK to customer_requirement_master.id."
+    },
+    "customer_code": {
+      "type": "string"
+    },
+    "core_requirement_id": {
+      "type": "string",
+      "description": "FK to gsp_core_standard.id."
+    },
+    "mapping_type": {
+      "type": "string",
+      "enum": [
+        "identical",
+        "customer_stricter",
+        "gsp_stricter",
+        "customer_additional",
+        "gsp_additional",
+        "conflict",
+        "not_applicable"
+      ]
+    },
+    "gap_description": {
+      "type": "string"
+    },
+    "resolution": {
+      "type": "string",
+      "description": "How the gap or conflict is resolved."
+    },
+    "requires_customer_approval": {
+      "type": "boolean",
+      "default": false
+    },
+    "mapped_by": {
+      "type": "string"
+    },
+    "mapped_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verified_by": {
+      "type": "string"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

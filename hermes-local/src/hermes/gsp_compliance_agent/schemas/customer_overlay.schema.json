@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/customer_overlay",
+  "title": "Customer Overlay",
+  "description": "Customer-specific requirements that modify, extend, or override the GSP Core Standard. Links back to core requirements where applicable.",
+  "type": "object",
+  "required": [
+    "id",
+    "customer_code",
+    "core_requirement_id",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "customer_code": {
+      "type": "string",
+      "description": "Short customer identifier (e.g., IKEA, TARGET, WALMART)."
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "core_requirement_id": {
+      "type": "string",
+      "description": "FK to gsp_core_standard.id."
+    },
+    "overlay_type": {
+      "type": "string",
+      "enum": [
+        "identical",
+        "stricter",
+        "additional",
+        "different_procedure",
+        "waived"
+      ],
+      "description": "How this customer requirement relates to the core standard."
+    },
+    "customer_requirement_text": {
+      "type": "string",
+      "description": "The customer's specific requirement text."
+    },
+    "customer_clause_ref": {
+      "type": "string"
+    },
+    "source_requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "FK to requirement_breakdown.id entries for this customer."
+    },
+    "gap_analysis": {
+      "type": "string",
+      "description": "Difference between core standard and customer requirement."
+    },
+    "required_evidence": {
+      "type": "string",
+      "description": "What evidence the customer expects for this requirement."
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

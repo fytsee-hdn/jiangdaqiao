@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/evidence_matrix",
+  "title": "Evidence Matrix",
+  "description": "Draft evidence requirements derived from GSP Standard candidates via LLM semantic analysis (C6A). Each record specifies what evidence would demonstrate compliance with a GSP standard.",
+  "type": "object",
+  "required": [
+    "evidence_id",
+    "gsp_standard_id",
+    "evidence_title",
+    "evidence_type",
+    "review_status",
+    "approval_status"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "description": "C6A: Canonical evidence ID (e.g., EV-GSP-COM-P04-SWM-001-001)."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "gsp_standard_id": {
+      "type": "string",
+      "description": "C6A: FK to gsp_core_standard.gsp_standard_id."
+    },
+    "gsp_standard_title": {
+      "type": "string",
+      "description": "C6A: Title of the linked GSP standard candidate."
+    },
+    "source_customer_requirement_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "crm_id": { "type": "string" },
+          "customer": { "type": "string" },
+          "standard_family": { "type": "string" },
+          "clause_ref": { "type": "string" },
+          "original_text_excerpt": { "type": "string" }
+        }
+      },
+      "description": "C6A: Traceability back to customer requirement master records."
+    },
+    "source_original_text_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "C6A: References to source_text_archive IDs for original IWAY text."
+    },
+    "evidence_title": {
+      "type": "string",
+      "description": "C6A: Human-readable title for this evidence requirement."
+    },
+    "evidence_requirement_statement": {
+      "type": "string",
+      "description": "C6A: Full description of what evidence is required and why."
+    },
+    "evidence_type": {
+      "type": "string",
+      "enum": [
+        "policy_or_procedure",
+        "work_instruction",
+        "training_record",
+        "attendance_or_system_export",
+        "inspection_record",
+        "maintenance_record",
+        "risk_assessment",
+        "permit_or_license",
+        "monitoring_record",
+        "incident_or_near_miss_record",
+        "audit_record",
+        "photo_or_visual_evidence",
+        "supplier_or_subcontractor_record",
+        "communication_record",
+        "corrective_action_record",
+        "other",
+        "unknown"
+      ],
+      "description": "C6A: Categorised type of evidence proposed by LLM."
+    },
+    "evidence_owner_function": {
+      "type": "string",
+      "description": "C6A: Function accountable for providing this evidence (e.g., HR, EHS, Production, QA)."
+    },
+    "evidence_responsible_department": {
+      "type": "string",
+      "description": "C6A: Department responsible for maintaining this evidence."
+    },
+    "evidence_frequency": {
+      "type": "string",
+      "enum": [
+        "once",
+        "daily",
+        "weekly",
+        "monthly",
+        "quarterly",
+        "annually",
+        "per_shift",
+        "per_batch",
+        "as_needed",
+        "upon_request",
+        "ongoing",
+        "unknown"
+      ],
+      "description": "C6A: How often this evidence must be collected or updated."
+    },
+    "evidence_format": {
+      "type": "string",
+      "enum": [
+        "document",
+        "spreadsheet",
+        "photograph",
+        "video",
+        "system_export",
+        "signed_form",
+        "certificate",
+        "log_book",
+        "database_record",
+        "email",
+        "physical_sample",
+        "other",
+        "unknown"
+      ],
+      "description": "C6A: Expected format of the evidence."
+    },
+    "evidence_acceptance_criteria": {
+      "type": "string",
+      "description": "C6A: What constitutes acceptable evidence (what an auditor would accept)."
+    },
+    "evidence_retention_requirement": {
+      "type": "string",
+      "description": "C6A: How long evidence must be retained (e.g., '3 years', 'until next audit')."
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low",
+        "unknown"
+      ],
+      "description": "C6A: Risk level if this evidence is missing or inadequate."
+    },
+    "llm_reasoning_summary": {
+      "type": "string",
+      "description": "C6A: Summary of why the LLM proposed this evidence requirement."
+    },
+    "uncertainty_notes": {
+      "type": "string",
+      "description": "C6A: Notes about uncertainty, ambiguity, or alternative interpretations."
+    },
+    "needs_human_review": {
+      "type": "boolean",
+      "default": false,
+      "description": "C6A: True if the LLM flagged this evidence as needing human verification."
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "draft_pending_review",
+        "in_review",
+        "confirmed",
+        "rejected"
+      ],
+      "description": "C6A: Initial status is always draft_pending_review."
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "not_approved",
+        "pending_approval",
+        "approved"
+      ],
+      "description": "C6A: Initial status is always not_approved."
+    },
+    "evidence_generation_method": {
+      "type": "string",
+      "enum": [
+        "llm_semantic_analysis",
+        "llm_semantic_analysis_mock",
+        "manual",
+        "imported"
+      ],
+      "description": "C6A: How this evidence record was generated."
+    },
+    "generated_by": {
+      "type": "string",
+      "description": "C6A: System or user that generated this record."
+    },
+    "batch_id": {
+      "type": "string",
+      "description": "C6A: Batch identifier for the generation run."
+    },
+    "sample_only": {
+      "type": "boolean",
+      "default": false,
+      "description": "C6A: True if based on sample/test candidates, not real IWAY data."
+    },
+    "created_by": {
+      "type": "string",
+      "description": "C6A: User ID or system that created this record."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    },
+
+    "id": {
+      "type": "string",
+      "description": "Legacy ID field (backward compat). Same as evidence_id."
+    },
+    "core_requirement_id": {
+      "type": "string",
+      "description": "Legacy FK to gsp_core_standard.id (backward compat). Same as gsp_standard_id."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "collected", "verified", "expired", "missing"],
+      "description": "Legacy lifecycle status (backward compat). C6A uses review_status instead."
+    },
+    "customer_overlay_id": { "type": "string" },
+    "country_overlay_id": { "type": "string" },
+    "department_package_id": { "type": "string" },
+    "evidence_description": {
+      "type": "string",
+      "description": "Legacy field (backward compat). C6A uses evidence_requirement_statement."
+    },
+    "evidence_location": { "type": "string" },
+    "evidence_ref": { "type": "string" },
+    "collection_frequency": {
+      "type": "string",
+      "enum": ["once", "daily", "weekly", "monthly", "per_batch", "per_shift", "as_needed"],
+      "description": "Legacy field (backward compat). C6A uses evidence_frequency."
+    },
+    "collected_by": { "type": "string" },
+    "collected_at": { "type": "string", "format": "date-time" },
+    "verified_by": { "type": "string" },
+    "verified_at": { "type": "string", "format": "date-time" },
+    "valid_until": { "type": "string", "format": "date" },
+    "retention_period_months": {
+      "type": "integer",
+      "description": "Legacy field (backward compat). C6A uses evidence_retention_requirement."
+    },
+    "audit_readiness": {
+      "type": "string",
+      "enum": ["ready", "incomplete", "missing", "expired", "not_applicable"]
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": { "type": "string" },
+        "reviewed_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

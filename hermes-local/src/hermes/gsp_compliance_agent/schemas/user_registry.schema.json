@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/user_registry",
+  "title": "User Registry",
+  "description": "Unified user registry for all GSP agents. One entry per user. Roles, permissions, and task scopes are defined here.",
+  "type": "object",
+  "required": [
+    "user_id",
+    "display_name",
+    "primary_role",
+    "status"
+  ],
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Unique stable user identifier."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "suspended"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "primary_role": {
+      "type": "string",
+      "enum": [
+        "owner",
+        "admin",
+        "compliance_owner",
+        "department_owner",
+        "finance",
+        "manager",
+        "employee",
+        "external_auditor"
+      ],
+      "description": "Primary organisational role."
+    },
+    "department": {
+      "type": "string",
+      "description": "Department code (e.g., PROD, QC, WH, HR, ADMIN)."
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "wechat_user_id": {
+      "type": "string",
+      "description": "WeChat/WCom platform user ID for message routing."
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Granular permission tags (e.g., compliance.read_core, compliance.edit_overlay, admin.read_status)."
+    },
+    "accessible_windows": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of window_ids this user can access."
+    },
+    "task_scopes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Business domains this user handles (e.g., compliance_ikea, compliance_vietnam_law, procurement_paper)."
+    },
+    "language_preference": {
+      "type": "string",
+      "default": "zh"
+    },
+    "timezone": {
+      "type": "string",
+      "default": "Asia/Bangkok"
+    }
+  },
+  "additionalProperties": false
+}

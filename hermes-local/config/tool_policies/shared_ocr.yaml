@@ -1,0 +1,9 @@
+tool_id: shared_ocr
+tool_type: ocr_engine
+shared: true
+outputs:
+  - text
+  - table
+  - bounding_boxes
+  - confidence
+requires_profile_extraction_policy: true

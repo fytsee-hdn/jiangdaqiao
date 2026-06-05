@@ -1,0 +1,37 @@
+{
+  "version": "1.0.0",
+  "description": "Maps WeCom entry identifiers to GSP internal window_ids.",
+  "default_window": "common_window",
+  "bindings": [
+    {
+      "wecom_entry": "compliance_owner_bot",
+      "window_id": "compliance_owner_window",
+      "bot_name": "GSP Compliance Agent",
+      "description": "Compliance owner direct window"
+    },
+    {
+      "wecom_entry": "department_compliance_bot",
+      "window_id": "department_compliance_window",
+      "bot_name": "GSP Department Compliance",
+      "description": "Department owner compliance window"
+    },
+    {
+      "wecom_entry": "service_bot",
+      "window_id": "common_window",
+      "bot_name": "GSP Service Agent",
+      "description": "General service window"
+    },
+    {
+      "wecom_entry": "admin_bot",
+      "window_id": "admin_window",
+      "bot_name": "GSP Admin Agent",
+      "description": "Admin-only window"
+    },
+    {
+      "wecom_entry": "reimbursement_bot",
+      "window_id": "reimbursement_window",
+      "bot_name": "GSP Reimbursement Agent",
+      "description": "Reimbursement window"
+    }
+  ]
+}

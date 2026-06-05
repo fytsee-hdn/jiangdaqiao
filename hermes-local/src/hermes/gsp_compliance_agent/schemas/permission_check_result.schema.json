@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/permission_check_result",
+  "title": "Permission Check Result",
+  "description": "Code-level permission check result. Permissions are enforced by code, not LLM. High-risk actions require confirmation.",
+  "type": "object",
+  "required": [
+    "check_id",
+    "user_id",
+    "allowed"
+  ],
+  "properties": {
+    "check_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_role": {
+      "type": "string"
+    },
+    "window_id": {
+      "type": "string"
+    },
+    "target_agent": {
+      "type": "string"
+    },
+    "requested_permission": {
+      "type": "string"
+    },
+    "allowed": {
+      "type": "boolean"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "is_high_risk": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this action requires additional confirmation."
+    },
+    "requires_confirmation": {
+      "type": "boolean",
+      "default": false
+    },
+    "confirmation_method": {
+      "type": "string",
+      "enum": [
+        "none",
+        "cli_required",
+        "chatbot_confirm",
+        "owner_approval",
+        "multi_factor"
+      ]
+    },
+    "confirmation_deadline": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false
+    },
+    "confirmed_by": {
+      "type": "string"
+    },
+    "confirmed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "override_allowed": {
+      "type": "boolean",
+      "default": false
+    },
+    "override_by": {
+      "type": "string"
+    },
+    "override_reason": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

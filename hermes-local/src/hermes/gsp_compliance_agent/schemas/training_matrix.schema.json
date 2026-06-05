@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/training_matrix",
+  "title": "Training Matrix",
+  "description": "Defines who needs to be trained on which requirements, how training is delivered, and tracks completion status.",
+  "type": "object",
+  "required": [
+    "id",
+    "core_requirement_ids",
+    "target_role",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "planned",
+        "in_progress",
+        "completed",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "core_requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "department_package_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "training_title": {
+      "type": "string"
+    },
+    "target_role": {
+      "type": "string",
+      "description": "Role that must complete this training."
+    },
+    "target_department": {
+      "type": "string"
+    },
+    "training_method": {
+      "type": "string",
+      "enum": [
+        "classroom",
+        "online",
+        "on_the_job",
+        "video",
+        "manual_read",
+        "quiz_only",
+        "external_certification",
+        "toolbox_talk"
+      ]
+    },
+    "training_material_path": {
+      "type": "string"
+    },
+    "duration_minutes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "trainer": {
+      "type": "string"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": [
+        "once",
+        "annual",
+        "biannual",
+        "quarterly",
+        "on_change",
+        "on_hire"
+      ]
+    },
+    "completion_criteria": {
+      "type": "string",
+      "description": "How to determine training is complete (e.g., quiz score ≥ 80%, practical demo)."
+    },
+    "requires_refresher": {
+      "type": "boolean",
+      "default": false
+    },
+    "refresher_interval_months": {
+      "type": "integer"
+    },
+    "trainee_records": {
+      "type": "array",
+      "description": "Per-person training completion records.",
+      "items": {
+        "type": "object",
+        "required": [
+          "person_id",
+          "completed_at"
+        ],
+        "properties": {
+          "person_id": {
+            "type": "string"
+          },
+          "person_name": {
+            "type": "string"
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "score": {
+            "type": "number"
+          },
+          "trainer_signoff": {
+            "type": "string"
+          },
+          "certificate_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

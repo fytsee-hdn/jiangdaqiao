@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/applicable_legal_requirement",
+  "title": "Applicable Legal Requirement",
+  "description": "LLM-drafted candidate for a legal requirement that may apply to GSP. Contains applicability analysis, function assignment, risk area, and links to GSP/IWAY. Starts as applicability_pending_review. NOT a final legal determination.",
+  "type": "object",
+  "required": [
+    "legal_requirement_id",
+    "country_code",
+    "requirement_summary",
+    "review_status"
+  ],
+  "properties": {
+    "legal_requirement_id": {
+      "type": "string",
+      "description": "Unique ID (e.g., ALR-VN-LABOUR-2019-01)."
+    },
+    "legal_source_id": {
+      "type": "string",
+      "description": "FK to legal_source_register.legal_source_id."
+    },
+    "legal_text_id": {
+      "type": "string",
+      "description": "FK to legal_text_archive.legal_text_id."
+    },
+    "legal_index_id": {
+      "type": "string",
+      "description": "FK to legal_curated_index.legal_index_id."
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "jurisdiction": {
+      "type": "string"
+    },
+    "law_number": {
+      "type": "string"
+    },
+    "law_name": {
+      "type": "string"
+    },
+    "article_reference": {
+      "type": "string"
+    },
+    "original_text_link": {
+      "type": "string",
+      "description": "Reference back to legal_text_archive ID or original text."
+    },
+    "requirement_summary": {
+      "type": "string",
+      "description": "LLM-summarised or user-curated requirement description."
+    },
+    "applicability_scope": {
+      "type": "string",
+      "description": "Scope of applicability (e.g., 'all facilities', 'warehouses only')."
+    },
+    "applicable_to_gsp_candidate": {
+      "type": "boolean",
+      "default": false,
+      "description": "LLM assessment: may this apply to GSP?"
+    },
+    "applicable_function": {
+      "type": "string",
+      "description": "LLM-assessed function (e.g., 'environment', 'labour', 'safety')."
+    },
+    "applicable_department": {
+      "type": "string",
+      "description": "LLM-assessed department."
+    },
+    "risk_area": {
+      "type": "string",
+      "description": "Risk area hint (e.g., 'fire_safety', 'chemical_management')."
+    },
+    "obligation_type": {
+      "type": "string",
+      "enum": [
+        "prohibition",
+        "mandatory_requirement",
+        "permit_licence",
+        "reporting",
+        "record_keeping",
+        "training",
+        "monitoring",
+        "other"
+      ],
+      "default": "mandatory_requirement"
+    },
+    "compliance_obligation_candidate": {
+      "type": "string",
+      "description": "LLM-drafted compliance obligation text — candidate only."
+    },
+    "linked_gsp_standard_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Candidate links to GSP standard IDs (if obvious)."
+    },
+    "linked_iway_requirement_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Candidate links to IWAY/customer requirement IDs."
+    },
+    "stricter_than_customer_requirement": {
+      "type": "boolean",
+      "default": false,
+      "description": "LLM flag: may be stricter than customer requirement."
+    },
+    "needs_legal_review": {
+      "type": "boolean",
+      "default": true,
+      "description": "LLM flag: uncertainty detected, legal review needed."
+    },
+    "llm_reasoning_summary": {
+      "type": "string",
+      "description": "LLM's reasoning for applicability assessment."
+    },
+    "uncertainty_notes": {
+      "type": "string",
+      "description": "Specific uncertainties noted by LLM."
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "applicability_pending_review",
+        "applicable_pending_legal_review",
+        "not_applicable",
+        "confirmed_applicable",
+        "rejected",
+        "needs_legal_review",
+        "superseded"
+      ],
+      "default": "applicability_pending_review"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "not_approved",
+        "legal_review_pending",
+        "legal_confirmed_reference_only"
+      ],
+      "default": "not_approved"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

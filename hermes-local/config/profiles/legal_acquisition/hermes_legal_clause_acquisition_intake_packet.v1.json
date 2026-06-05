@@ -1,0 +1,29 @@
+{
+  "schema_version": "hermes_legal_clause_acquisition_intake_packet.v1",
+  "status": "source_pathway_ready_for_comprehensive_inventory_discovery_no_prebuilt_targets",
+  "task_id": "TASK-20260525-001",
+  "created_at": "2026-05-24T19:49:57.299119+00:00",
+  "codex_manifest_path": "/Users/HY-yin/Documents/Codex-Compliance-System/tasks/TASK-20260525-001/vietnam_legal_clause_acquisition_sources.v1.json",
+  "runtime_manifest_path": "/Users/HY-yin/.hermes/profiles/compliance/workspace/source_intake/vietnam_legal_clause_acquisition/vietnam_legal_clause_acquisition_sources.v1.json",
+  "accepted_prompt_path": "/Users/HY-yin/hermes-local/config/profiles/legal_acquisition/hermes_fetch_prompt.v1.zh.md",
+  "codex_prompt_path": "/Users/HY-yin/Documents/Codex-Compliance-System/tasks/TASK-20260525-001/hermes_fetch_prompt.v1.zh.md",
+  "runtime_prompt_path": "/Users/HY-yin/.hermes/profiles/compliance/workspace/source_intake/vietnam_legal_clause_acquisition/hermes_fetch_prompt.v1.zh.md",
+  "runtime_summary_path": "/Users/HY-yin/.hermes/profiles/compliance/workspace/source_intake/vietnam_legal_clause_acquisition/vietnam_legal_clause_acquisition_sources.summary.zh.md",
+  "hermes_allowed_output_root": "/Users/HY-yin/.hermes/profiles/compliance/workspace/promotion_artifacts/legal_clause_acquisition/",
+  "hermes_forbidden_live_write_root": "/Users/HY-yin/hermes-local/data/knowledge/compliance/",
+  "next_actor": "Hermes",
+  "next_action": "Use the source pathway manifest only to choose official source routes. Do not use a prebuilt legal target queue. For a legal database, legal catalogue, or unknown-domain request, start comprehensive candidate legal inventory discovery from official sources first; derive requirements only after official text capture and review. Business scope may later filter or prioritize, but is not required to start.",
+  "promotion_allowed_now": false,
+  "live_database_write_allowed_now": false,
+  "updated_at": "2026-05-24T20:45:00Z",
+  "source_pathway_manifest_path": "/Users/HY-yin/hermes-local/config/profiles/legal_acquisition/vietnam_legal_clause_acquisition_sources.v1.json",
+  "source_pathway_manifest_kind": "source_pathway_manifest_only_no_specific_legal_targets",
+  "content_boundary": {
+    "source_pathway_manifest_must_not_contain_specific_laws_or_clauses": true,
+    "prebuilt_candidate_target_queue_allowed": false,
+    "comprehensive_inventory_discovery_from_official_sources_required": true,
+    "business_scope_required_to_start_inventory_discovery": false,
+    "specific_targets_must_come_from_fresh_official_discovery": true,
+    "requirements_must_be_derived_from_verified_legal_text_after_inventory": true
+  }
+}
