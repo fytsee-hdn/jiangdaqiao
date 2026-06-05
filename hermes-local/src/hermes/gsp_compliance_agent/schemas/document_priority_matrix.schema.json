@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/document_priority_matrix",
+  "title": "Document Priority Matrix",
+  "description": "Prioritises which source documents to process first based on risk, customer demand, and legal urgency.",
+  "type": "object",
+  "required": [
+    "id",
+    "source_id",
+    "priority_score",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "FK to source_register.id."
+    },
+    "document_title": {
+      "type": "string",
+      "description": "Denormalised title for readability."
+    },
+    "priority_score": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Composite priority score."
+    },
+    "priority_level": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "scoring_factors": {
+      "type": "object",
+      "description": "Breakdown of the priority score.",
+      "properties": {
+        "customer_mandatory": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 40
+        },
+        "legal_requirement": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 40
+        },
+        "audit_risk": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "implementation_complexity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "business_impact": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        }
+      }
+    },
+    "target_completion_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "Person or role responsible for processing."
+    },
+    "processing_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "requirement_breakdown_done",
+        "core_standard_done",
+        "department_packages_done",
+        "completed"
+      ]
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

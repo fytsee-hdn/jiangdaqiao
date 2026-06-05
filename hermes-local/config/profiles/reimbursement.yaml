@@ -1,0 +1,15 @@
+profile: reimbursement
+purpose: reimbursement intake, OCR policy selection, validation, evidence, and draft outputs
+allowed_entrypoints:
+  - service_agent
+  - reimbursement_worker
+admin_capabilities: false
+may_inherit_admin: false
+contains_secrets: false
+runtime_profile_root: .hermes/profiles/reimbursement
+default_ocr_policy: reimbursement_ocr_extraction
+allowed_actions:
+  - intake_reimbursement
+  - extract_reimbursement_fields
+  - validate_reimbursement_fields
+  - draft_reimbursement_output

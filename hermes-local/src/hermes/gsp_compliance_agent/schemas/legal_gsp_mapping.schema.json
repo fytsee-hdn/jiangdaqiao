@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/legal_gsp_mapping",
+  "title": "Legal GSP Mapping",
+  "description": "Explicit mapping between a confirmed legal requirement and a GSP Standard entry. Created during legal review when a legal requirement is deemed applicable and mapped to one or more GSP standards.",
+  "type": "object",
+  "required": [
+    "legal_gsp_mapping_id",
+    "country_code",
+    "legal_requirement_id",
+    "gsp_standard_id",
+    "review_status"
+  ],
+  "properties": {
+    "legal_gsp_mapping_id": {
+      "type": "string",
+      "description": "Unique mapping ID (e.g., LGM-VN-001)."
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "legal_requirement_id": {
+      "type": "string",
+      "description": "FK to applicable_legal_requirement.legal_requirement_id."
+    },
+    "gsp_standard_id": {
+      "type": "string",
+      "description": "FK to gsp_core_standard.id."
+    },
+    "mapping_type": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "partial",
+        "contextual",
+        "no_mapping_identified"
+      ]
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "equivalent",
+        "stricter",
+        "less_strict",
+        "additional",
+        "different_procedure",
+        "conflict"
+      ]
+    },
+    "mapped_scope": {
+      "type": "string",
+      "description": "Scope of the mapping (e.g., 'full', 'partial_article', 'cross_reference')."
+    },
+    "legal_dependency_type": {
+      "type": "string",
+      "enum": [
+        "mandatory_legal_obligation",
+        "reference_standard",
+        "contextual_guidance",
+        "not_applicable"
+      ]
+    },
+    "needs_legal_review": {
+      "type": "boolean",
+      "default": true
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "draft_mapping",
+        "pending_review",
+        "confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "default": "draft_mapping"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "not_approved",
+        "reference_only",
+        "legal_confirmed"
+      ],
+      "default": "not_approved"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

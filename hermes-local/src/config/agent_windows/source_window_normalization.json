@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "description": "Maps Hermes profile + platform to GSP source_window and target_agent.",
+  "mappings": {
+    "default": {
+      "wecom": {
+        "source_window": "admin_development_window",
+        "target_agent": "gsp_admin_agent",
+        "purpose": "development_and_coding",
+        "is_business_user_entry": false,
+        "notes": "Current default profile WeCom bot used for admin/dev work. NOT a compliance business entry."
+      },
+      "weixin": {
+        "source_window": "general_assistant",
+        "target_agent": "gsp_service_agent",
+        "purpose": "general_or_existing_chat",
+        "is_business_user_entry": false,
+        "notes": "Existing WeChat bots: Hermes助手 + 报销助手."
+      },
+      "wechat_chatbot": {
+        "source_window": "general_assistant",
+        "target_agent": "gsp_service_agent",
+        "purpose": "general_or_existing_chat",
+        "is_business_user_entry": false
+      }
+    },
+    "future_compliance": {
+      "wecom": {
+        "source_window": "compliance_owner_window",
+        "target_agent": "gsp_compliance_agent",
+        "purpose": "future_business_compliance_entry",
+        "is_business_user_entry": true,
+        "status": "reserved_not_active",
+        "notes": "Reserved for future dedicated compliance profile. Do NOT activate until C4/C5/C6 are stable."
+      }
+    }
+  },
+  "fallback": {
+    "source_window": "unknown",
+    "target_agent": "gsp_service_agent",
+    "requires_review": true,
+    "notes": "Unknown profile/platform combinations map here for safety."
+  }
+}

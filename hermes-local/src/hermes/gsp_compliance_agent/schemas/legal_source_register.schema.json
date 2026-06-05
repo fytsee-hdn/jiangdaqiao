@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/legal_source_register",
+  "title": "Legal Source Register",
+  "description": "Register of every legal source document — law, decree, circular, technical regulation, legal index, curated Excel index. Supports multi-country, multi-jurisdiction legal workflows.",
+  "type": "object",
+  "required": [
+    "legal_source_id",
+    "country_code",
+    "source_type",
+    "law_name_original",
+    "status"
+  ],
+  "properties": {
+    "legal_source_id": {
+      "type": "string",
+      "description": "Unique source ID (e.g., LS-VN-LABOUR-2019-001)."
+    },
+    "country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2."
+    },
+    "jurisdiction": {
+      "type": "string",
+      "description": "e.g., 'national', 'provincial'."
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "law",
+        "decree",
+        "circular",
+        "technical_regulation",
+        "standard",
+        "official_guidance",
+        "legal_index",
+        "curated_excel_index",
+        "other"
+      ]
+    },
+    "law_number": {
+      "type": "string",
+      "description": "Official law number (e.g., '45/2019/QH14')."
+    },
+    "law_name_original": {
+      "type": "string",
+      "description": "Original language law name."
+    },
+    "law_name_en": {
+      "type": "string",
+      "description": "English translation of law name (reference only)."
+    },
+    "issuing_authority": {
+      "type": "string",
+      "description": "e.g., 'National Assembly', 'Prime Minister', 'Ministry of Labour'."
+    },
+    "issue_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "current",
+        "amended",
+        "replaced",
+        "repealed",
+        "draft_reference"
+      ],
+      "default": "current"
+    },
+    "language": {
+      "type": "string",
+      "description": "Source language (e.g., 'vi', 'en')."
+    },
+    "source_file_id": {
+      "type": "string",
+      "description": "FK to upload or file tracking system."
+    },
+    "source_file_hash": {
+      "type": "string",
+      "description": "SHA256 hash of source file."
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Official source URL."
+    },
+    "source_origin": {
+      "type": "string",
+      "description": "How the source was obtained (upload, scrape, reference)."
+    },
+    "replaces": {
+      "type": "string",
+      "description": "ID of the source this replaces (if any)."
+    },
+    "amended_by": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of sources that amend this one."
+    },
+    "related_sources": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of related sources."
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "registered",
+        "archived",
+        "verified",
+        "superseded"
+      ],
+      "default": "registered"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "not_approved",
+        "archived_reference_only"
+      ],
+      "default": "not_approved"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

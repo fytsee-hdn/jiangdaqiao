@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/country_overlay",
+  "title": "Country Overlay",
+  "description": "Country-specific legal requirements that modify, extend, or override the GSP Core Standard. Legal interpretations must be marked and reviewed.",
+  "type": "object",
+  "required": [
+    "id",
+    "country_code",
+    "core_requirement_id",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 (e.g., VN, CN)."
+    },
+    "country_name": {
+      "type": "string"
+    },
+    "core_requirement_id": {
+      "type": "string",
+      "description": "FK to gsp_core_standard.id."
+    },
+    "overlay_type": {
+      "type": "string",
+      "enum": [
+        "identical",
+        "stricter",
+        "additional",
+        "different_procedure",
+        "waived"
+      ]
+    },
+    "legal_basis": {
+      "type": "string",
+      "description": "Citation of the law or regulation (e.g., 'Vietnam Labour Code 2019, Article XX')."
+    },
+    "legal_requirement_text": {
+      "type": "string"
+    },
+    "source_requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_legal_interpretation": {
+      "type": "boolean",
+      "default": true,
+      "description": "Country overlays are legal interpretations by default."
+    },
+    "legal_reviewed_by": {
+      "type": "string"
+    },
+    "legal_reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "enforcement_authority": {
+      "type": "string",
+      "description": "Government body that enforces this regulation."
+    },
+    "penalty_summary": {
+      "type": "string",
+      "description": "Summary of non-compliance penalties (reference only)."
+    },
+    "penalty_is_reference_only": {
+      "type": "boolean",
+      "default": true
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

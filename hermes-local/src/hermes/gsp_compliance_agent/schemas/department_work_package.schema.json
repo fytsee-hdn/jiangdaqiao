@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/department_work_package",
+  "title": "Department Work Package",
+  "description": "A department-specific SOP, checklist, or work instruction derived from GSP Core Standards and overlays. Assigned to department owners for daily execution.",
+  "type": "object",
+  "required": [
+    "id",
+    "department_code",
+    "core_requirement_ids",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "active",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "department_code": {
+      "type": "string",
+      "description": "Short department code (e.g., PROD, QC, WH, HR, ADMIN)."
+    },
+    "department_name": {
+      "type": "string"
+    },
+    "package_type": {
+      "type": "string",
+      "enum": [
+        "sop",
+        "checklist",
+        "work_instruction",
+        "emergency_procedure",
+        "inspection_form"
+      ],
+      "description": "Type of work package."
+    },
+    "title": {
+      "type": "string"
+    },
+    "core_requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "FK list to gsp_core_standard.id entries covered by this package.",
+      "minItems": 1
+    },
+    "customer_overlay_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "country_overlay_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "procedure_steps": {
+      "type": "array",
+      "description": "Ordered steps for SOP or checklist.",
+      "items": {
+        "type": "object",
+        "required": [
+          "step_number",
+          "action"
+        ],
+        "properties": {
+          "step_number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "action": {
+            "type": "string",
+            "description": "What to do."
+          },
+          "frequency": {
+            "type": "string",
+            "enum": [
+              "once",
+              "daily",
+              "weekly",
+              "monthly",
+              "quarterly",
+              "per_batch",
+              "per_shift",
+              "as_needed"
+            ]
+          },
+          "responsible_role": {
+            "type": "string"
+          },
+          "evidence_required": {
+            "type": "boolean",
+            "default": false
+          },
+          "evidence_type": {
+            "type": "string",
+            "description": "Photo, signature, log entry, measurement, etc."
+          }
+        }
+      }
+    },
+    "required_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Roles that must execute or sign off."
+    },
+    "training_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "training_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "FK to training_matrix.id."
+    },
+    "assigned_owner": {
+      "type": "string",
+      "description": "Department owner responsible for this package."
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "review_cycle_months": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "How often this package must be reviewed."
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "approved_by": {
+          "type": "string"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

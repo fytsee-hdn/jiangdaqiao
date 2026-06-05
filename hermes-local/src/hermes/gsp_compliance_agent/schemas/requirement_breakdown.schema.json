@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/requirement_breakdown",
+  "title": "Requirement Breakdown",
+  "description": "One entry per individual requirement clause extracted from a source document. The fundamental unit of compliance work.",
+  "type": "object",
+  "required": [
+    "id",
+    "source_id",
+    "clause_ref",
+    "requirement_text",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "FK to source_register.id."
+    },
+    "source_section": {
+      "type": "string",
+      "description": "Original section / clause / paragraph number."
+    },
+    "clause_ref": {
+      "type": "string",
+      "description": "Canonical clause reference (e.g., IWAY-6.0-ENV-001)."
+    },
+    "requirement_text": {
+      "type": "string",
+      "description": "Verbatim or close-paraphrase of the requirement."
+    },
+    "requirement_text_official": {
+      "type": "string",
+      "description": "Official text in original language if different."
+    },
+    "language": {
+      "type": "string",
+      "description": "ISO 639-1 language code of requirement_text."
+    },
+    "scope_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "shall",
+        "should",
+        "may",
+        "information_only",
+        "legal_obligation"
+      ],
+      "description": "Normative force of this requirement."
+    },
+    "is_mapped_to_core": {
+      "type": "boolean",
+      "default": false,
+      "description": "Has this been mapped into a GSP Core Standard requirement?"
+    },
+    "core_requirement_id": {
+      "type": "string",
+      "description": "FK to gsp_core_standard.id, once mapped."
+    },
+    "has_legal_implication": {
+      "type": "boolean",
+      "default": false
+    },
+    "legal_disclaimer": {
+      "type": "object",
+      "properties": {
+        "is_legal_interpretation": {
+          "type": "boolean"
+        },
+        "legal_reviewed_by": {
+          "type": "string"
+        },
+        "legal_reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "legal_reference_original": {
+          "type": "string"
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

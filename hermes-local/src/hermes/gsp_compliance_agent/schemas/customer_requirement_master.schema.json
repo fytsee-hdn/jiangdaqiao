@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/customer_requirement_master",
+  "title": "Customer Requirement Master",
+  "description": "Master table of customer-specific compliance requirements. Each entry is a requirement from one customer's standard (e.g., IWAY, Walmart RS).",
+  "type": "object",
+  "required": [
+    "id",
+    "customer_code",
+    "standard_name",
+    "clause_ref",
+    "requirement_text",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "deprecated",
+        "superseded"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "customer_code": {
+      "type": "string",
+      "description": "Short customer identifier (e.g., IKEA, TARGET)."
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "standard_name": {
+      "type": "string",
+      "description": "Full name of the standard (e.g., IWAY Standard 6.0)."
+    },
+    "standard_version": {
+      "type": "string"
+    },
+    "clause_ref": {
+      "type": "string",
+      "description": "Original clause/section reference."
+    },
+    "requirement_text": {
+      "type": "string",
+      "description": "Verbatim or close-paraphrase of the requirement."
+    },
+    "requirement_text_original_language": {
+      "type": "string"
+    },
+    "original_language": {
+      "type": "string"
+    },
+    "domain_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "environment, labour, health_safety, chemical, fire, social, ethics, trade, quality."
+    },
+    "normative_force": {
+      "type": "string",
+      "enum": [
+        "shall",
+        "should",
+        "may",
+        "information_only"
+      ]
+    },
+    "is_critical": {
+      "type": "boolean",
+      "default": false,
+      "description": "Non-compliance = immediate business risk."
+    },
+    "source_document_id": {
+      "type": "string",
+      "description": "FK to source_register.id."
+    },
+    "source_section": {
+      "type": "string"
+    },
+    "mapped_to_gsp_core": {
+      "type": "boolean",
+      "default": false
+    },
+    "core_requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "FK to gsp_core_standard.id."
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

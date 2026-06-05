@@ -1,0 +1,9 @@
+policy_id: compliance_ocr_extraction
+policy_type: ocr_extraction
+profile: compliance
+required_fields:
+  - clause
+  - source
+  - page
+  - version
+  - evidence_trace

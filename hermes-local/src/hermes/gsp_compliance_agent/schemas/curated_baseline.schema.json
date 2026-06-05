@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/curated_baseline",
+  "title": "Curated Baseline Record",
+  "description": "User-provided curated baseline (Excel/Word/Text) for comparing against PDF-extracted requirements (P8B).",
+  "type": "object",
+  "required": ["curated_baseline_id", "customer", "source_family", "requirement_text", "review_status", "approval_status"],
+  "properties": {
+    "curated_baseline_id": {"type": "string", "description": "Unique baseline record ID."},
+    "source_id": {"type": "string", "description": "FK to source_register.id for the imported source."},
+    "source_family": {"type": "string", "description": "Standard family (IWAY, FSC, EHS)."},
+    "source_version": {"type": "string", "description": "Standard version."},
+    "customer": {"type": "string", "description": "Customer code (IKEA)."},
+    "uploaded_file_id": {"type": "string"},
+    "uploaded_filename": {"type": "string"},
+    "baseline_type": {"type": "string", "enum": ["excel", "word", "csv", "text", "pasted_text"]},
+    "baseline_language": {"type": "string", "default": "en"},
+    "section_name": {"type": "string"},
+    "requirement_code": {"type": "string", "description": "Normalized code like LT 6.1, N 6.0, G 4.1."},
+    "requirement_level": {"type": "string", "description": "Requirement level code."},
+    "requirement_text": {"type": "string"},
+    "original_row_number": {"type": "integer"},
+    "original_sheet_name": {"type": "string"},
+    "source_reference": {"type": "string"},
+    "sample_only": {"type": "boolean", "default": false},
+    "review_status": {"type": "string", "enum": [
+      "baseline_imported_pending_comparison",
+      "compared_pending_review",
+      "confirmed_as_baseline",
+      "correction_required",
+      "rejected",
+      "superseded"
+    ]},
+    "approval_status": {"type": "string", "enum": ["not_approved"]},
+    "batch_id": {"type": "string"},
+    "created_by": {"type": "string"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

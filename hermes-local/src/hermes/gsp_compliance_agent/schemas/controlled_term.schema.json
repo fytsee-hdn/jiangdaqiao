@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/controlled_term",
+  "title": "Controlled Term",
+  "description": "Standardised compliance terminology glossary. Ensures consistent language across all compliance documents.",
+  "type": "object",
+  "required": [
+    "id",
+    "term",
+    "definition",
+    "domain"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "approved",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "term": {
+      "type": "string",
+      "description": "Standardised term."
+    },
+    "definition": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string",
+      "description": "environment, labour, safety, chemical, legal, quality, trade."
+    },
+    "source": {
+      "type": "string",
+      "description": "Where this definition comes from (e.g., IWAY Glossary, ISO 14001)."
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Alternative names or abbreviations."
+    },
+    "translations": {
+      "type": "object",
+      "description": "Approved translations.",
+      "properties": {
+        "zh": {
+          "type": "string"
+        },
+        "vi": {
+          "type": "string"
+        }
+      }
+    },
+    "used_in_core_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Which core standard entries use this term."
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

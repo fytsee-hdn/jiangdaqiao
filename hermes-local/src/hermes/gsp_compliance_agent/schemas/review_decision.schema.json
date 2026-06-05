@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/review_decision",
+  "title": "Review Decision",
+  "description": "Records every human confirmation, correction, rejection, split, or merge decision on compliance records. Immutable audit trail.",
+  "type": "object",
+  "required": [
+    "review_decision_id",
+    "target_record_type",
+    "target_record_id",
+    "decision_type",
+    "decision_result",
+    "reviewer_user_id",
+    "new_status"
+  ],
+  "properties": {
+    "review_decision_id": {
+      "type": "string",
+      "description": "Unique decision ID."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "target_record_type": {
+      "type": "string",
+      "enum": [
+        "source_text_archive",
+        "customer_requirement_master",
+        "controlled_term"
+      ],
+      "description": "Which table the target record belongs to."
+    },
+    "target_record_id": {
+      "type": "string",
+      "description": "FK to the target record."
+    },
+    "decision_type": {
+      "type": "string",
+      "enum": [
+        "confirm_source_text",
+        "correct_source_text",
+        "reject_source_text",
+        "confirm_customer_requirement",
+        "reject_not_requirement",
+        "require_correction",
+        "split_requirement",
+        "merge_requirement",
+        "confirm_controlled_term",
+        "reject_not_term"
+      ]
+    },
+    "decision_result": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "corrected",
+        "rejected",
+        "split_required",
+        "merged",
+        "pending_follow_up"
+      ]
+    },
+    "reviewer_user_id": {
+      "type": "string",
+      "description": "User who made this decision."
+    },
+    "reviewer_role": {
+      "type": "string"
+    },
+    "review_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "previous_status": {
+      "type": "string",
+      "description": "Status before this decision."
+    },
+    "new_status": {
+      "type": "string",
+      "description": "Status after this decision."
+    },
+    "comment": {
+      "type": "string",
+      "description": "Reviewer comment."
+    },
+    "correction_text": {
+      "type": "string",
+      "description": "Corrected text, if applicable."
+    },
+    "correction_reason": {
+      "type": "string"
+    },
+    "split_target_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "merge_target_id": {
+      "type": "string"
+    },
+    "audit_log_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

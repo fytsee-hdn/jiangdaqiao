@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/legal_article_candidate",
+  "title": "Legal Article Candidate",
+  "description": "Extracted and summarized legal article from official legal text. Each record represents one article, clause, or section. Created during legal text processing. All records remain candidate/pending review/not_approved until user/legal confirmation.",
+  "type": "object",
+  "required": [
+    "legal_article_candidate_id",
+    "country_code",
+    "article_reference",
+    "original_text",
+    "review_status"
+  ],
+  "properties": {
+    "legal_article_candidate_id": {
+      "type": "string",
+      "description": "Unique ID (e.g., LAC-VN-001)."
+    },
+    "legal_source_id": {
+      "type": "string",
+      "description": "FK to legal_source_register."
+    },
+    "legal_text_id": {
+      "type": "string",
+      "description": "FK to legal_text_archive."
+    },
+    "acquisition_id": {
+      "type": "string",
+      "description": "FK to legal_original_acquisition."
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "jurisdiction": {
+      "type": "string"
+    },
+    "law_number": {
+      "type": "string"
+    },
+    "law_name": {
+      "type": "string"
+    },
+    "article_reference": {
+      "type": "string",
+      "description": "Article, clause, or section reference (e.g., 'Điều 1', 'Article 1', 'Section 3.2')."
+    },
+    "clause_reference": {
+      "type": "string",
+      "description": "More specific clause/sub-clause reference."
+    },
+    "original_text": {
+      "type": "string",
+      "description": "Verbatim text of the article from official source."
+    },
+    "original_language": {
+      "type": "string"
+    },
+    "translated_summary_reference_only": {
+      "type": "string",
+      "description": "Machine/LLM translation or summary — REFERENCE ONLY."
+    },
+    "article_topic": {
+      "type": "string",
+      "description": "LLM-assigned topic label."
+    },
+    "article_keywords": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "possible_gsp_domains": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "LLM suggestion: possible GSP domains (e.g., environment, labour)."
+    },
+    "possible_iway_links": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "LLM suggestion: possible IWAY requirement links."
+    },
+    "llm_summary": {
+      "type": "string",
+      "description": "LLM-generated summary of the article — candidate only."
+    },
+    "llm_relevance_hint": {
+      "type": "string",
+      "description": "LLM hint about potential relevance to compliance."
+    },
+    "needs_legal_review": {
+      "type": "boolean",
+      "default": true
+    },
+    "needs_human_confirmation": {
+      "type": "boolean",
+      "default": true
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "article_extracted_pending_review",
+        "summarized_pending_review",
+        "relevance_candidate_pending_review",
+        "confirmed_article_text",
+        "rejected_not_relevant",
+        "needs_legal_review"
+      ],
+      "default": "article_extracted_pending_review"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": ["not_approved", "reference_only"],
+      "default": "not_approved"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

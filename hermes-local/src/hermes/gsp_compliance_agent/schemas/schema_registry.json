@@ -1,0 +1,493 @@
+{
+  "version": "1.0.0",
+  "description": "GSP Compliance Agent — Schema Registry. Documents every schema's lifecycle status and dependencies.",
+  "schemas": [
+    {
+      "schema_name": "user_registry",
+      "file_path": "hermes/gsp_compliance_agent/schemas/user_registry.schema.json",
+      "lifecycle_status": "active",
+      "domain": "interaction",
+      "purpose": "Unified user registry with roles, permissions, task scopes, and window access.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_user_registry.jsonl",
+      "upstream_dependencies": [],
+      "downstream_dependencies": [
+        "agent_window_permission",
+        "interaction_record"
+      ],
+      "replaced_by": null,
+      "notes": "Foundation table for all access control."
+    },
+    {
+      "schema_name": "agent_window_permission",
+      "file_path": "hermes/gsp_compliance_agent/schemas/agent_window_permission.schema.json",
+      "lifecycle_status": "active",
+      "domain": "routing",
+      "purpose": "Defines which windows connect to which agents with role-based access.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_window_agent_permissions.jsonl",
+      "upstream_dependencies": [
+        "user_registry"
+      ],
+      "downstream_dependencies": [
+        "interaction_record"
+      ],
+      "replaced_by": null,
+      "notes": "Professional windows must use direct_to_agent. Common window uses through_service_agent."
+    },
+    {
+      "schema_name": "interaction_record",
+      "file_path": "hermes/gsp_compliance_agent/schemas/interaction_record.schema.json",
+      "lifecycle_status": "active",
+      "domain": "interaction",
+      "purpose": "Complete trace of one user interaction. Requires both prefilter_result and llm_intent_result.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_interaction_records.jsonl",
+      "upstream_dependencies": [
+        "user_registry",
+        "agent_window_permission",
+        "intent_prefilter",
+        "llm_intent_result",
+        "permission_check_result"
+      ],
+      "downstream_dependencies": [],
+      "replaced_by": null,
+      "notes": "Audit backbone. Every message must produce one interaction_record."
+    },
+    {
+      "schema_name": "intent_prefilter",
+      "file_path": "hermes/gsp_compliance_agent/schemas/intent_prefilter.schema.json",
+      "lifecycle_status": "active",
+      "domain": "routing",
+      "purpose": "Code-level deterministic prefiltering before LLM intent classification.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_interaction_records.jsonl",
+      "upstream_dependencies": [
+        "agent_window_permission"
+      ],
+      "downstream_dependencies": [
+        "llm_intent_result",
+        "interaction_record"
+      ],
+      "replaced_by": null,
+      "notes": "Deterministic only — no LLM. Blocks dangerous commands, flags active conversations."
+    },
+    {
+      "schema_name": "llm_intent_result",
+      "file_path": "hermes/gsp_compliance_agent/schemas/llm_intent_result.schema.json",
+      "lifecycle_status": "active",
+      "domain": "routing",
+      "purpose": "Structured LLM intent classifier output. Selects target agent and confidence.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_interaction_records.jsonl",
+      "upstream_dependencies": [
+        "intent_prefilter"
+      ],
+      "downstream_dependencies": [
+        "interaction_record",
+        "permission_check_result"
+      ],
+      "replaced_by": null,
+      "notes": "LLM output is validated by code before routing."
+    },
+    {
+      "schema_name": "permission_check_result",
+      "file_path": "hermes/gsp_compliance_agent/schemas/permission_check_result.schema.json",
+      "lifecycle_status": "active",
+      "domain": "routing",
+      "purpose": "Code-level permission check result. High-risk actions require confirmation fields.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_interaction_records.jsonl",
+      "upstream_dependencies": [
+        "user_registry",
+        "llm_intent_result"
+      ],
+      "downstream_dependencies": [
+        "interaction_record"
+      ],
+      "replaced_by": null,
+      "notes": "Permissions are code-enforced, not LLM-decided."
+    },
+    {
+      "schema_name": "source_register",
+      "file_path": "hermes/gsp_compliance_agent/schemas/source_register.schema.json",
+      "lifecycle_status": "active",
+      "domain": "source_control",
+      "purpose": "Registers every source document before requirement breakdown.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_source_register.jsonl",
+      "upstream_dependencies": [],
+      "downstream_dependencies": [
+        "source_text_archive",
+        "customer_requirement_master",
+        "document_priority_matrix"
+      ],
+      "replaced_by": null,
+      "notes": "Entry point for all external compliance documents."
+    },
+    {
+      "schema_name": "source_text_archive",
+      "file_path": "hermes/gsp_compliance_agent/schemas/source_text_archive.schema.json",
+      "lifecycle_status": "active",
+      "domain": "source_control",
+      "purpose": "Immutable archive of original source texts. Never modified after ingestion.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_source_text_archive.jsonl",
+      "upstream_dependencies": [
+        "source_register"
+      ],
+      "downstream_dependencies": [
+        "customer_requirement_master",
+        "legal_original_text"
+      ],
+      "replaced_by": null,
+      "notes": "IMMUTABLE. Translations are reference-only unless verified."
+    },
+    {
+      "schema_name": "document_priority_matrix",
+      "file_path": "hermes/gsp_compliance_agent/schemas/document_priority_matrix.schema.json",
+      "lifecycle_status": "active",
+      "domain": "source_control",
+      "purpose": "Prioritises source documents for processing.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_document_priority_matrix.jsonl",
+      "upstream_dependencies": [
+        "source_register"
+      ],
+      "downstream_dependencies": [],
+      "replaced_by": null,
+      "notes": "5-dimension scoring: customer/legal/audit/complexity/business."
+    },
+    {
+      "schema_name": "customer_requirement_master",
+      "file_path": "hermes/gsp_compliance_agent/schemas/customer_requirement_master.schema.json",
+      "lifecycle_status": "active",
+      "domain": "customer_requirement",
+      "purpose": "Master table of customer-specific requirements. IWAY entries go here.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_customer_requirement_master.jsonl",
+      "upstream_dependencies": [
+        "source_register",
+        "source_text_archive"
+      ],
+      "downstream_dependencies": [
+        "gsp_core_standard",
+        "customer_to_gsp_mapping",
+        "ikea_iway_overlay"
+      ],
+      "replaced_by": null,
+      "notes": "This is where IWAY original requirements are registered. Not to be confused with GSP standard."
+    },
+    {
+      "schema_name": "customer_to_gsp_mapping",
+      "file_path": "hermes/gsp_compliance_agent/schemas/customer_to_gsp_mapping.schema.json",
+      "lifecycle_status": "active",
+      "domain": "customer_requirement",
+      "purpose": "Tracks how each customer requirement maps to GSP Core Standard entries.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_customer_to_gsp_mapping.jsonl",
+      "upstream_dependencies": [
+        "customer_requirement_master",
+        "gsp_core_standard"
+      ],
+      "downstream_dependencies": [
+        "ikea_iway_overlay"
+      ],
+      "replaced_by": null,
+      "notes": "Replaces deprecated customer_overlay.schema.json."
+    },
+    {
+      "schema_name": "ikea_iway_overlay",
+      "file_path": "hermes/gsp_compliance_agent/schemas/ikea_iway_overlay.schema.json",
+      "lifecycle_status": "active",
+      "domain": "customer_requirement",
+      "purpose": "IKEA-specific IWAY overlay: audit scoring, evidence requirements, audit history.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_ikea_iway_overlay.jsonl",
+      "upstream_dependencies": [
+        "customer_requirement_master",
+        "gsp_core_standard",
+        "customer_to_gsp_mapping"
+      ],
+      "downstream_dependencies": [
+        "evidence_matrix"
+      ],
+      "replaced_by": null,
+      "notes": "IKEA-specific extension of customer_to_gsp_mapping."
+    },
+    {
+      "schema_name": "controlled_term",
+      "file_path": "hermes/gsp_compliance_agent/schemas/controlled_term.schema.json",
+      "lifecycle_status": "active",
+      "domain": "customer_requirement",
+      "purpose": "Standardised compliance terminology glossary with translations.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_controlled_terms.jsonl",
+      "upstream_dependencies": [],
+      "downstream_dependencies": [
+        "gsp_core_standard"
+      ],
+      "replaced_by": null,
+      "notes": "Ensures consistent language across all compliance documents."
+    },
+    {
+      "schema_name": "gsp_core_standard",
+      "file_path": "hermes/gsp_compliance_agent/schemas/gsp_core_standard.schema.json",
+      "lifecycle_status": "active",
+      "domain": "gsp_standard",
+      "purpose": "The single consolidated GSP compliance standard. De-duplicated from customer + legal sources.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_gsp_core_standard.jsonl",
+      "upstream_dependencies": [
+        "customer_requirement_master",
+        "applicable_legal_standard",
+        "controlled_term"
+      ],
+      "downstream_dependencies": [
+        "customer_to_gsp_mapping",
+        "department_work_package",
+        "evidence_matrix",
+        "training_matrix"
+      ],
+      "replaced_by": null,
+      "notes": "This is the GSP internal management standard. NOT a copy of IWAY."
+    },
+    {
+      "schema_name": "requirement_breakdown",
+      "file_path": "hermes/gsp_compliance_agent/schemas/requirement_breakdown.schema.json",
+      "lifecycle_status": "reserved",
+      "domain": "gsp_standard",
+      "purpose": "Original requirement breakdown — reserved for future use if needed.",
+      "primary_jsonl_target": null,
+      "upstream_dependencies": [
+        "source_register"
+      ],
+      "downstream_dependencies": [],
+      "replaced_by": null,
+      "notes": "Reserved. Currently customer_requirement_master handles breakdown. May be used for complex multi-standard reconciliation."
+    },
+    {
+      "schema_name": "legal_original_text",
+      "file_path": "hermes/gsp_compliance_agent/schemas/legal_original_text.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "Archived original legal text. IMMUTABLE. Never interpreted.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_legal_original_text.jsonl",
+      "upstream_dependencies": [
+        "source_text_archive"
+      ],
+      "downstream_dependencies": [
+        "applicable_legal_standard"
+      ],
+      "replaced_by": null,
+      "notes": "IMMUTABLE. Interpretation goes in applicable_legal_standard."
+    },
+    {
+      "schema_name": "applicable_legal_standard",
+      "file_path": "hermes/gsp_compliance_agent/schemas/applicable_legal_standard.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "Interpreted legal requirement — actionable form after legal review.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_applicable_legal_standard.jsonl",
+      "upstream_dependencies": [
+        "legal_original_text"
+      ],
+      "downstream_dependencies": [
+        "gsp_core_standard",
+        "legal_conflict_case"
+      ],
+      "replaced_by": null,
+      "notes": "Replaces deprecated country_overlay.schema.json. All legal interpretations marked as such."
+    },
+    {
+      "schema_name": "legal_conflict_case",
+      "file_path": "hermes/gsp_compliance_agent/schemas/legal_conflict_case.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "Tracks conflicts between customer, legal, and GSP core requirements.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_legal_conflict_case.jsonl",
+      "upstream_dependencies": [
+        "customer_requirement_master",
+        "applicable_legal_standard",
+        "gsp_core_standard"
+      ],
+      "downstream_dependencies": [],
+      "replaced_by": null,
+      "notes": "Each conflict must be resolved with documented rationale."
+    },
+    {
+      "schema_name": "evidence_matrix",
+      "file_path": "hermes/gsp_compliance_agent/schemas/evidence_matrix.schema.json",
+      "lifecycle_status": "active",
+      "domain": "evidence",
+      "purpose": "Tracks audit evidence for each requirement.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_evidence_matrix.jsonl",
+      "upstream_dependencies": [
+        "gsp_core_standard",
+        "department_work_package"
+      ],
+      "downstream_dependencies": [],
+      "replaced_by": null,
+      "notes": "Audit readiness: ready/incomplete/missing/expired."
+    },
+    {
+      "schema_name": "training_matrix",
+      "file_path": "hermes/gsp_compliance_agent/schemas/training_matrix.schema.json",
+      "lifecycle_status": "active",
+      "domain": "training",
+      "purpose": "Defines who needs training on which requirements, with per-person completion records.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_training_matrix.jsonl",
+      "upstream_dependencies": [
+        "gsp_core_standard",
+        "department_work_package"
+      ],
+      "downstream_dependencies": [],
+      "replaced_by": null,
+      "notes": "Includes per-trainee records with scores and signoffs."
+    },
+    {
+      "schema_name": "department_work_package",
+      "file_path": "hermes/gsp_compliance_agent/schemas/department_work_package.schema.json",
+      "lifecycle_status": "active",
+      "domain": "department_package",
+      "purpose": "Department-specific SOPs, checklists, and work instructions.",
+      "primary_jsonl_target": "data/knowledge/compliance/sample_records/sample_department_work_package.jsonl",
+      "upstream_dependencies": [
+        "gsp_core_standard"
+      ],
+      "downstream_dependencies": [
+        "evidence_matrix",
+        "training_matrix"
+      ],
+      "replaced_by": null,
+      "notes": "Assigned to department owners for daily execution."
+    },
+    {
+      "schema_name": "customer_overlay",
+      "file_path": "hermes/gsp_compliance_agent/schemas/customer_overlay.schema.json",
+      "lifecycle_status": "deprecated",
+      "domain": "overlay",
+      "purpose": "[DEPRECATED] Generic customer overlay.",
+      "primary_jsonl_target": null,
+      "upstream_dependencies": [],
+      "downstream_dependencies": [],
+      "replaced_by": "customer_to_gsp_mapping.schema.json + ikea_iway_overlay.schema.json",
+      "notes": "DEPRECATED in Phase C2. Use customer_to_gsp_mapping + ikea_iway_overlay instead."
+    },
+    {
+      "schema_name": "country_overlay",
+      "file_path": "hermes/gsp_compliance_agent/schemas/country_overlay.schema.json",
+      "lifecycle_status": "deprecated",
+      "domain": "overlay",
+      "purpose": "[DEPRECATED] Generic country overlay.",
+      "primary_jsonl_target": null,
+      "upstream_dependencies": [],
+      "downstream_dependencies": [],
+      "replaced_by": "legal_original_text.schema.json + applicable_legal_standard.schema.json + legal_conflict_case.schema.json",
+      "notes": "DEPRECATED in Phase C2. Use legal_original_text + applicable_legal_standard + legal_conflict_case instead."
+    },
+    {
+      "schema_name": "country_legal_profile",
+      "file_path": "hermes/gsp_compliance_agent/schemas/country_legal_profile.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "Per-country legal configuration — jurisdiction levels, languages, legal categories, owner, review requirements. Added in P9A.",
+      "primary_jsonl_target": "data/knowledge/compliance/legal/country_profiles/country_legal_profiles.jsonl",
+      "upstream_dependencies": [],
+      "downstream_dependencies": [
+        "legal_source_register"
+      ],
+      "replaced_by": null,
+      "notes": "Supports Vietnam and future countries."
+    },
+    {
+      "schema_name": "legal_source_register",
+      "file_path": "hermes/gsp_compliance_agent/schemas/legal_source_register.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "Register of every legal source document — law, decree, circular, technical regulation, legal index, curated Excel. Added in P9A.",
+      "primary_jsonl_target": "data/knowledge/compliance/legal/legal_source_register/legal_source_register.jsonl",
+      "upstream_dependencies": [
+        "country_legal_profile"
+      ],
+      "downstream_dependencies": [
+        "legal_text_archive",
+        "legal_curated_index",
+        "applicable_legal_requirement"
+      ],
+      "replaced_by": null,
+      "notes": "Entry point for all legal source documents. Supports multi-country."
+    },
+    {
+      "schema_name": "legal_text_archive",
+      "file_path": "hermes/gsp_compliance_agent/schemas/legal_text_archive.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "Immutable archive of original legal text in source language. Added in P9A.",
+      "primary_jsonl_target": "data/knowledge/compliance/legal/legal_text_archive/legal_text_archive.jsonl",
+      "upstream_dependencies": [
+        "legal_source_register"
+      ],
+      "downstream_dependencies": [
+        "applicable_legal_requirement"
+      ],
+      "replaced_by": null,
+      "notes": "IMMUTABLE. Never modified after ingestion."
+    },
+    {
+      "schema_name": "legal_curated_index",
+      "file_path": "hermes/gsp_compliance_agent/schemas/legal_curated_index.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "User-curated legal index from Excel/CSV/TXT upload. Added in P9A.",
+      "primary_jsonl_target": "data/knowledge/compliance/legal/legal_curated_index/legal_curated_index.jsonl",
+      "upstream_dependencies": [
+        "legal_source_register"
+      ],
+      "downstream_dependencies": [
+        "applicable_legal_requirement"
+      ],
+      "replaced_by": null,
+      "notes": "Not legal interpretation — just indexing and classification."
+    },
+    {
+      "schema_name": "applicable_legal_requirement",
+      "file_path": "hermes/gsp_compliance_agent/schemas/applicable_legal_requirement.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "LLM-drafted candidate for a legal requirement that may apply to GSP. Added in P9A.",
+      "primary_jsonl_target": "data/knowledge/compliance/legal/applicable_legal_requirements/applicable_legal_requirements.jsonl",
+      "upstream_dependencies": [
+        "legal_source_register",
+        "legal_text_archive",
+        "legal_curated_index",
+        "gsp_core_standard"
+      ],
+      "downstream_dependencies": [
+        "legal_interpretation_candidate",
+        "legal_conflict_case",
+        "legal_gsp_mapping"
+      ],
+      "replaced_by": null,
+      "notes": "NOT a final legal determination. Requires review."
+    },
+    {
+      "schema_name": "legal_interpretation_candidate",
+      "file_path": "hermes/gsp_compliance_agent/schemas/legal_interpretation_candidate.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "Interpreted form of a legal requirement — operational impact, GSP/checklist implications. Added in P9A.",
+      "primary_jsonl_target": "data/knowledge/compliance/legal/legal_interpretations/legal_interpretations.jsonl",
+      "upstream_dependencies": [
+        "applicable_legal_requirement"
+      ],
+      "downstream_dependencies": [
+        "legal_gsp_mapping",
+        "legal_conflict_case"
+      ],
+      "replaced_by": null,
+      "notes": "Always a candidate until approved by qualified legal professional."
+    },
+    {
+      "schema_name": "legal_gsp_mapping",
+      "file_path": "hermes/gsp_compliance_agent/schemas/legal_gsp_mapping.schema.json",
+      "lifecycle_status": "active",
+      "domain": "legal",
+      "purpose": "Explicit mapping between a confirmed legal requirement and a GSP Standard entry. Added in P9A.",
+      "primary_jsonl_target": "data/knowledge/compliance/legal/legal_gsp_mappings/legal_gsp_mappings.jsonl",
+      "upstream_dependencies": [
+        "applicable_legal_requirement",
+        "gsp_core_standard"
+      ],
+      "downstream_dependencies": [],
+      "replaced_by": null,
+      "notes": "Created during legal review. Requires confirmed_applicable requirement."
+    }
+  ]
+}

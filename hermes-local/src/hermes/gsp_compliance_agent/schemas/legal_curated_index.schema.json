@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/legal_curated_index",
+  "title": "Legal Curated Index",
+  "description": "User-curated legal index from Excel/CSV/TXT upload. Contains topic, law reference, article reference, and optional applicability hints. Not legal interpretation — just indexing and classification.",
+  "type": "object",
+  "required": [
+    "legal_index_id",
+    "legal_source_id",
+    "country_code",
+    "topic",
+    "review_status"
+  ],
+  "properties": {
+    "legal_index_id": {
+      "type": "string",
+      "description": "Unique index record ID (e.g., LI-VN-ENV-01-001)."
+    },
+    "legal_source_id": {
+      "type": "string",
+      "description": "FK to legal_source_register.legal_source_id."
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "index_source_type": {
+      "type": "string",
+      "enum": ["excel", "csv", "txt", "pasted_text", "other"],
+      "default": "excel"
+    },
+    "uploaded_file_id": {
+      "type": "string"
+    },
+    "uploaded_filename": {
+      "type": "string"
+    },
+    "sheet_name": {
+      "type": "string"
+    },
+    "row_number": {
+      "type": "integer"
+    },
+    "topic": {
+      "type": "string",
+      "description": "Main topic label (e.g., '安全生产', '环境保护')."
+    },
+    "subtopic": {
+      "type": "string",
+      "description": "Sub-topic or category."
+    },
+    "law_number": {
+      "type": "string"
+    },
+    "law_name": {
+      "type": "string"
+    },
+    "article_reference": {
+      "type": "string"
+    },
+    "original_text_or_summary": {
+      "type": "string",
+      "description": "Original text snippet or user-provided summary."
+    },
+    "applicability_hint": {
+      "type": "string",
+      "description": "User hint about applicability (e.g., 'applies to all factories')."
+    },
+    "function_hint": {
+      "type": "string",
+      "description": "User hint about affected function/department."
+    },
+    "risk_area_hint": {
+      "type": "string",
+      "description": "User hint about risk area (e.g., 'fire_safety', 'labour_rights')."
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "indexed_pending_analysis",
+        "analysed_pending_review",
+        "confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "default": "indexed_pending_analysis"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "not_approved",
+        "reference_only"
+      ],
+      "default": "not_approved"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

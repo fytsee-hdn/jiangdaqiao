@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/source_register",
+  "title": "Source Register",
+  "description": "Registers every compliance source document before requirement breakdown begins. One entry per document version.",
+  "type": "object",
+  "required": [
+    "id",
+    "source_type",
+    "document_title",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable unique identifier."
+    },
+    "version": {
+      "type": "integer",
+      "description": "Schema version number for this record.",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "deprecated",
+        "superseded"
+      ],
+      "description": "Lifecycle status of this record."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 creation timestamp."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 last-modification timestamp."
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "customer_requirement",
+        "country_legal",
+        "internal_control",
+        "industry_standard",
+        "training_material",
+        "audit_report",
+        "other"
+      ],
+      "description": "High-level category of the source document."
+    },
+    "document_title": {
+      "type": "string",
+      "description": "Official title of the source document."
+    },
+    "document_code": {
+      "type": "string",
+      "description": "Document code or reference number (e.g., IWAY 6.0, ISO 14001:2015)."
+    },
+    "issuing_body": {
+      "type": "string",
+      "description": "Who issued this document (e.g., IKEA, Vietnamese Government, Internal)."
+    },
+    "issue_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the document was issued."
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the document takes effect."
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the document expires, if any."
+    },
+    "scope_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags: environment, labour, health_safety, chemical, fire, social, ethics, trade, quality, etc."
+    },
+    "applies_to_countries": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "ISO 3166-1 alpha-2 country codes this document applies to."
+    },
+    "applies_to_facilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Facility codes or names this document applies to."
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "description": "Processing priority for requirement breakdown."
+    },
+    "has_been_broken_down": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this document has been processed through requirement breakdown."
+    },
+    "requirement_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of requirements extracted from this document."
+    },
+    "storage_path": {
+      "type": "string",
+      "description": "Relative path to the stored source file under data/knowledge/compliance/source_files/."
+    },
+    "original_filename": {
+      "type": "string"
+    },
+    "file_hash": {
+      "type": "string",
+      "description": "SHA-256 of the original file for integrity."
+    },
+    "language": {
+      "type": "string",
+      "description": "ISO 639-1 language code of the document."
+    },
+    "review": {
+      "type": "object",
+      "description": "Who reviewed this record and when.",
+      "required": [
+        "reviewed_by"
+      ],
+      "properties": {
+        "reviewed_by": {
+          "type": "string",
+          "description": "Person ID or name who reviewed."
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "review_notes": {
+          "type": "string"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,697 @@
+{
+  "content_boundary": {
+    "allowed_content": [
+      "source tiers and authority levels",
+      "source URLs or endpoint patterns",
+      "batch-readability and freshness rules",
+      "official verification gates",
+      "forbidden uses for non-authoritative sources"
+    ],
+    "forbidden_content": [
+      "specific law or decree target lists",
+      "specific QCVN target lists",
+      "legal clause candidates",
+      "legal requirement names",
+      "checklist rows",
+      "legal applicability conclusions"
+    ],
+    "manifest_kind": "source_pathway_manifest_only",
+    "rule": "If Hermes needs a concrete acquisition target list, it must create a fresh candidate list from official-source discovery evidence. Business scope may narrow or prioritize discovery, but it is not required to start comprehensive legal inventory construction. Hermes must not infer legal targets from this source-pathway manifest and must not load a prebuilt candidate target queue."
+  },
+  "created_at": "2026-05-24T19:49:57.299119+00:00",
+  "created_by": "Codex",
+  "hermes_execution_rules": {
+    "allowed_write_root": "/Users/HY-yin/.hermes/profiles/compliance/workspace/promotion_artifacts/legal_clause_acquisition/",
+    "default_source_route": "source_use_cascade.general_legal_document_route",
+    "effective_status_source_route": "source_use_cascade.effective_status_route",
+    "forbidden_live_write_root": "/Users/HY-yin/hermes-local/data/knowledge/compliance/",
+    "if_user_lacks_legal_domain": "Start comprehensive candidate legal inventory discovery from official source pathways. Do not require the user to know or name a legal domain before the system can begin.",
+    "if_user_requests_specific_law_or_clause_list": "State that this source-pathway manifest does not itself contain specific laws. Do not use any prebuilt candidate target queue. If the user asks for a comprehensive catalogue or does not know the legal domain, begin fresh official-source candidate inventory discovery and label the result candidate-only until reviewed.",
+    "legal_database_build_order": [
+      "official_source_pathway_selection",
+      "comprehensive_candidate_legal_inventory_discovery",
+      "official_identity_and_effective_status_verification",
+      "official_original_text_acquisition",
+      "article_clause_point_extraction",
+      "applicability_classification",
+      "requirement_derivation_from_law",
+      "check_item_atomization",
+      "Codex_review",
+      "human_approval",
+      "live_promotion"
+    ],
+    "manifest_content_boundary": "SOURCE_PATHWAYS_ONLY_NO_SPECIFIC_LEGAL_TARGETS",
+    "must_follow_source_pathway_policy": "VN_LEGAL_SOURCE_PATHWAY_TIERS_V2",
+    "must_not_claim": [
+      "legal advice",
+      "legal applicability conclusion",
+      "compliance pass/fail",
+      "formal legal database completed",
+      "live approval"
+    ],
+    "must_not_generate_from_this_manifest": [
+      "name-only legal list",
+      "specific law inventory",
+      "clause list",
+      "legal classification input list"
+    ],
+    "must_not_submit_promotion_request_until": [
+      "official source files or HTML are fetched",
+      "hashes and source snapshots are created",
+      "clause candidates are extracted",
+      "Codex review packet is complete"
+    ],
+    "must_not_treat_this_manifest_as": [
+      "legal_document_list",
+      "legal_clause_list",
+      "legal_requirement_database",
+      "classification_source",
+      "checklist_source"
+    ],
+    "must_reject_promotion_if": [
+      "only_third_party_or_legacy_sources_are_available",
+      "official_source_identity_gate_failed",
+      "effective_status_is_inferred_from_non_official_source",
+      "QCVN_version_currency_not_checked",
+      "PDF_OCR_text_used_without_extraction_quality_review"
+    ],
+    "new_2025_plus_source_route": "source_use_cascade.new_2025_plus_document_route",
+    "non_source_tiers_forbidden_as_legal_evidence": [
+      "D1"
+    ],
+    "official_source_tiers_allowed_for_promotion_evidence": [
+      "A0",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "qcvn_source_route": "source_use_cascade.qcvn_and_technical_regulation_route",
+    "required_source_resolution_fields": [
+      "selected_official_source_tier",
+      "selected_official_source_id",
+      "candidate_sources_consulted",
+      "official_source_url",
+      "official_pdf_url_if_any",
+      "document_number",
+      "official_title",
+      "issuing_authority",
+      "issue_date",
+      "effective_date",
+      "expiry_date_if_reported",
+      "effective_status_as_reported",
+      "source_snapshot_path",
+      "source_hash_sha256",
+      "fetched_at",
+      "official_verified_at",
+      "next_reverify_at",
+      "verification_status",
+      "conflicts_or_gaps"
+    ],
+    "required_status_label_for_outputs": "CANDIDATE_ONLY_NOT_LIVE",
+    "third_party_source_tiers_candidate_only": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "C1",
+      "C2"
+    ]
+  },
+  "non_authoritative_sources": [
+    {
+      "forbidden_usage": "official original text authority_or_effective_status",
+      "source_id": "legacy_hse_archive",
+      "tier": "C2",
+      "usage": "reference_only_source_locator_and_candidate_text_comparison"
+    },
+    {
+      "forbidden_usage": "official_effective_status_or_direct_clause_promotion",
+      "source_id": "hf_th1nhng0_vietnamese_legal_documents",
+      "tier": "B1",
+      "usage": "primary_third_party_discovery_dataset_for_law_id_title_doc_id_relationship_hints"
+    },
+    {
+      "forbidden_usage": "official_source_authority_or_direct_clause_baseline",
+      "source_id": "hf_minhdoan17_vietnamese_legal_documents",
+      "tier": "B2",
+      "usage": "large_coverage_tvpl_derived_metadata_discovery_and_2025_plus_candidate_hinting"
+    },
+    {
+      "forbidden_usage": "official_source_authority_or_current_status_conclusion",
+      "source_id": "hf_vohuutridung_vietnamese_legal_documents",
+      "tier": "B2",
+      "usage": "large_coverage_third_party_candidate_discovery_when_available"
+    },
+    {
+      "forbidden_usage": "official_original_text_authority_or_effective_status",
+      "source_id": "hf_doanhieung_vbpl",
+      "tier": "B3",
+      "usage": "vbpl_derived_candidate_html_or_markdown_fallback"
+    },
+    {
+      "forbidden_usage": "formal_source_registry_population",
+      "source_id": "hf_undertheseanlp_uts_vlc",
+      "tier": "B4",
+      "usage": "limited_corpus_text_comparison_or_model_evaluation"
+    },
+    {
+      "forbidden_usage": "official_status_authority_bulk_ingestion_official_verified_text_or_final_legal_conclusion",
+      "required_flags": [
+        "candidate_source_only",
+        "third_party_text_requires_official_or_human_reverify",
+        "source_url_fetch_time_hash_required"
+      ],
+      "source_id": "thuvienphapluat_web",
+      "tier": "C1",
+      "url": "https://thuvienphapluat.vn",
+      "usage": "human_readable_cross_check_candidate_discovery_candidate_original_text_recovery_and_editorial_reference"
+    },
+    {
+      "forbidden_usage": "official_status_authority_or_direct_database_promotion",
+      "source_id": "luatvietnam_web",
+      "tier": "C1",
+      "usage": "human_readable_cross_check_news_and_editorial_reference"
+    },
+    {
+      "forbidden_usage": "official_status_authority_or_direct_database_promotion",
+      "source_id": "lawnet_web",
+      "tier": "C1",
+      "usage": "human_readable_cross_check_QCVN_or_article_explanation_reference"
+    },
+    {
+      "forbidden_usage": "official_legal_baseline_QCVN_currency_or_effective_status",
+      "source_id": "atld_hse_provider",
+      "tier": "C2",
+      "usage": "candidate_QCVN_TCVN_text_or_historical_HSE_comparison_when_id_known"
+    },
+    {
+      "forbidden_usage": "official_source_or_clause_database_evidence",
+      "source_id": "github_mlalab_vnlegaltext",
+      "tier": "D1",
+      "usage": "relationship_extraction_training_or_evaluation_only"
+    },
+    {
+      "forbidden_usage": "legal_source_authority",
+      "source_id": "hf_yuitc_vietnamese_legal_documents",
+      "tier": "D1",
+      "usage": "question_answering_or_retrieval_evaluation_only"
+    },
+    {
+      "forbidden_usage": "legal_source_authority_or_current_law_conclusion",
+      "source_id": "hf_thangvip_combined_vietnamese_legal_text",
+      "tier": "D1",
+      "usage": "combined_text_model_training_or_evaluation_only"
+    },
+    {
+      "forbidden_usage": "legal clause authority or live database row",
+      "source_id": "legacy_csv_excel_atom_outputs",
+      "tier": "legacy_reference",
+      "usage": "target queue and comparison only"
+    }
+  ],
+  "official_source_registry": [
+    {
+      "accepted_outputs": [
+        "official metadata",
+        "full HTML legal text where present",
+        "provision tree",
+        "references/amendment chain candidates"
+      ],
+      "authority_level": "official_legal_source_candidate",
+      "base_url": "https://vbpl-bientap-gateway.moj.gov.vn/api",
+      "batch_readability": "high_when_doc_id_known_medium_when_search_required",
+      "detail_endpoint": {
+        "method": "GET",
+        "path_template": "/qtdc/public/doc/{doc_id}"
+      },
+      "known_limitations": [
+        "keyword search is noisy and may miss exact laws",
+        "new 2025+ documents may appear first on government portal or signed PDF host",
+        "partial expiry requires article/scope review"
+      ],
+      "required_validation": [
+        "exact law_id or exact official title match",
+        "record current/effective status exactly as source reports it",
+        "do not infer current applicability from source status alone"
+      ],
+      "search_endpoint": {
+        "body_template": {
+          "keyword": "{law_id_or_title}",
+          "pageIndex": 1,
+          "pageSize": 10
+        },
+        "method": "POST",
+        "path": "/qtdc/public/doc/all"
+      },
+      "source_id": "vn_vbpl_bientap_gateway",
+      "tier": "A0"
+    },
+    {
+      "accepted_outputs": [
+        "government portal metadata",
+        "signed PDF source file",
+        "source snapshot"
+      ],
+      "authority_level": "official_legal_source_candidate",
+      "batch_readability": "medium_when_docid_or_pdf_url_known_low_for_open_search",
+      "hosts": [
+        "https://vanban.chinhphu.vn/",
+        "https://chinhphu.vn/",
+        "https://datafiles.chinhphu.vn/"
+      ],
+      "known_limitations": [
+        "signed PDF is authoritative but may require OCR",
+        "PDF extraction quality must be reviewed before clause promotion"
+      ],
+      "required_validation": [
+        "preserve PDF hash",
+        "OCR is candidate-only until reviewed",
+        "verify portal page and PDF host relationship"
+      ],
+      "source_id": "vn_government_portal_signed_pdf",
+      "tier": "A1"
+    },
+    {
+      "accepted_outputs": [
+        "gazette publication metadata",
+        "publication cross-check"
+      ],
+      "authority_level": "government_index",
+      "base_url": "https://congbao.chinhphu.vn/",
+      "batch_readability": "medium",
+      "known_limitations": [
+        "publication verification source, not preferred clause extraction source"
+      ],
+      "required_validation": [
+        "use as publication verification or fallback source evidence"
+      ],
+      "source_id": "vn_official_gazette",
+      "tier": "A2"
+    },
+    {
+      "accepted_outputs": [
+        "official Circular/Thông tư source files",
+        "QCVN annex files",
+        "ministry metadata or publication notice"
+      ],
+      "authority_level": "official_legal_source_candidate",
+      "batch_readability": "variable_by_ministry",
+      "hosts_by_use_case": {
+        "QCVN_and_technical_regulations": [
+          "issuing ministry or authority official domain"
+        ],
+        "implementation_circulars": [
+          "issuing ministry or authority official domain"
+        ]
+      },
+      "known_limitations": [
+        "site structure differs by ministry",
+        "bulk access may require per-ministry adapter"
+      ],
+      "required_validation": [
+        "verify issuer domain",
+        "identify issuing Circular before treating QCVN text as current",
+        "record version currency and replacement check"
+      ],
+      "source_id": "vn_issuing_authority_sites",
+      "tier": "A3"
+    },
+    {
+      "accepted_outputs": [
+        "official QCVN annex",
+        "official PDF or HTML from ministry/authority site",
+        "version-currency evidence"
+      ],
+      "authority_level": "official_technical_regulation_source_candidate",
+      "required_validation": [
+        "do not rely on QCVN number search alone",
+        "link QCVN to issuing Circular",
+        "check for replacement or amendment Circular"
+      ],
+      "source_id": "vn_ministry_qcvn_annex_sources",
+      "tier": "A3",
+      "usage": "Resolve QCVN/technical regulation annex text only after the issuing Circular is identified."
+    }
+  ],
+  "purpose": "Define Vietnam legal source pathways, source tiers, source authority boundaries, batch-readability rules, and official-verification requirements for Hermes. This file is a source-pathway manifest only. It must not contain specific legal documents, legal clauses, acquisition targets, or a legal checklist.",
+  "schema_version": "legal_clause_acquisition_sources.v1",
+  "source_pathway_policy": {
+    "core_rule": "Third-party datasets and websites may be used only for discovery, candidate text recovery, comparison, relationship hints, or model evaluation. Formal legal identity, effectiveness, original text, and live database writeback must be verified against official sources before promotion.",
+    "freshness_controls": {
+      "Important_P2_Active": {
+        "maximum_age_for_official_status_claim_days": 7,
+        "official_recheck_frequency": "weekly_or_before_each_promotion",
+        "third_party_discovery_recheck_frequency": "weekly"
+      },
+      "P1_Active": {
+        "maximum_age_for_official_status_claim_days": 1,
+        "official_recheck_frequency": "daily_or_before_each_promotion",
+        "third_party_discovery_recheck_frequency": "weekly"
+      },
+      "P3_Reference": {
+        "maximum_age_for_official_status_claim_days": 30,
+        "official_recheck_frequency": "monthly_or_before_external_use",
+        "third_party_discovery_recheck_frequency": "monthly"
+      }
+    },
+    "inventory_first_principle": "Hermes must support building a comprehensive candidate legal inventory from official source pathways before requirement extraction. Users are not required to know the legal domain in advance. Business scope is a later filter, not the starting point for legal database construction.",
+    "official_verification_required_for": [
+      "effective_status",
+      "current_applicability",
+      "official original text",
+      "clause database promotion",
+      "checklist/legal requirement finalization",
+      "audit-facing legal conclusion"
+    ],
+    "policy_id": "VN_LEGAL_SOURCE_PATHWAY_TIERS_V2",
+    "policy_status": "accepted_route_manifest_candidate_fetch_only",
+    "third_party_must_carry_flags": [
+      "candidate_source_only",
+      "official_verification_pending",
+      "dataset_or_page_fetched_at",
+      "dataset_commit_or_snapshot_id_if_available",
+      "not_authoritative_for_effective_status"
+    ]
+  },
+  "source_pathway_tier_registry": [
+    {
+      "authority": "official",
+      "batch_readability": "high_when_doc_id_known_medium_when_search_required",
+      "best_for": [
+        "official metadata",
+        "HTML legal text",
+        "article/clause extraction",
+        "provision tree",
+        "references and amendment-chain candidates",
+        "effective status as reported by official source"
+      ],
+      "coverage_notes": "Known doc_id detail endpoint is reliable; keyword search is low precision and must be identity-gated by document number, title, issuer, and date.",
+      "formal_use_allowed": true,
+      "formal_use_conditions": [
+        "exact identity match",
+        "source snapshot and hash preserved",
+        "official_verified_at recorded",
+        "effective status copied without inference"
+      ],
+      "source_ids": [
+        "vn_vbpl_bientap_gateway"
+      ],
+      "tier": "A0",
+      "tier_name": "official_structured_baseline"
+    },
+    {
+      "authority": "official",
+      "batch_readability": "medium_when_url_or_docid_known_low_for_open_search",
+      "best_for": [
+        "new 2025+ legal documents not yet indexed in VBPL",
+        "signed PDF identity/source evidence",
+        "government portal metadata",
+        "fallback official source evidence when parseable HTML/API text is unavailable"
+      ],
+      "coverage_notes": "PDF authority is high for identity and publication evidence, but PDF itself is not the preferred original-text archive. Prefer parseable HTML/API/structured text for clause library ingestion; OCR/text extracted from PDF remains candidate-only until reviewed.",
+      "formal_use_allowed": true,
+      "formal_use_conditions": [
+        "portal page and PDF host relationship verified",
+        "PDF hash preserved",
+        "HTML/API/structured text route attempted first where available",
+        "OCR or text extraction quality reviewed before clause promotion"
+      ],
+      "source_ids": [
+        "vn_government_portal_signed_pdf"
+      ],
+      "tier": "A1",
+      "tier_name": "official_government_signed_pdf"
+    },
+    {
+      "authority": "official_publication_index",
+      "batch_readability": "medium",
+      "best_for": [
+        "publication verification",
+        "fallback official evidence",
+        "cross-checking official promulgation"
+      ],
+      "coverage_notes": "Useful for publication proof; not the preferred clause extraction source.",
+      "formal_use_allowed": true,
+      "formal_use_conditions": [
+        "use as verification evidence or fallback source",
+        "do not replace VBPL HTML or signed PDF when those are available"
+      ],
+      "source_ids": [
+        "vn_official_gazette"
+      ],
+      "tier": "A2",
+      "tier_name": "official_gazette_publication_verification"
+    },
+    {
+      "authority": "official",
+      "batch_readability": "variable_by_ministry",
+      "best_for": [
+        "QCVN and technical regulation annexes",
+        "issuing Circular source files",
+        "ministry-level implementation documents"
+      ],
+      "coverage_notes": "QCVN should usually be resolved through its issuing Circular first, then verified against ministry or official publication files.",
+      "formal_use_allowed": true,
+      "formal_use_conditions": [
+        "issuer domain verified",
+        "issuing Circular identified",
+        "version currency checked"
+      ],
+      "source_ids": [
+        "vn_issuing_authority_sites",
+        "vn_ministry_qcvn_annex_sources"
+      ],
+      "tier": "A3",
+      "tier_name": "official_ministry_and_authority_sources"
+    },
+    {
+      "authority": "non_authoritative_third_party_dataset",
+      "batch_readability": "high_for_metadata_and_relationships_medium_for_full_content",
+      "best_for": [
+        "bulk discovery by law_id/title",
+        "VBPL doc_id hints",
+        "relationship and amendment-chain hints",
+        "QCVN issuing Circular discovery",
+        "candidate HTML recovery"
+      ],
+      "forbidden_usage": [
+        "official effective status conclusion",
+        "official original text authority",
+        "direct legal database promotion"
+      ],
+      "formal_use_allowed": false,
+      "freshness_risk": "medium_dataset_snapshot_may_lag_official_sources",
+      "observed_dataset_shape": {
+        "access_pattern": "Hugging Face parquet and datasets-server API",
+        "content_records": 178665,
+        "metadata_records": 153420,
+        "relationship_edges": 897890
+      },
+      "source_ids": [
+        "hf_th1nhng0_vietnamese_legal_documents"
+      ],
+      "tier": "B1",
+      "tier_name": "third_party_primary_discovery_dataset"
+    },
+    {
+      "authority": "non_authoritative_third_party_dataset",
+      "batch_readability": "high_for_metadata_low_to_medium_for_content_without_local_cache",
+      "best_for": [
+        "broad discovery",
+        "2025+ candidate discovery",
+        "TVPL URL hints",
+        "metadata comparison"
+      ],
+      "forbidden_usage": [
+        "official source authority",
+        "direct clause baseline",
+        "current law status conclusion"
+      ],
+      "formal_use_allowed": false,
+      "freshness_risk": "medium_to_high_depends_on_dataset_update_cycle",
+      "observed_dataset_shape": {
+        "access_pattern": "Hugging Face parquet; content requires local caching because remote first-row scan may exceed API limits",
+        "content_download_size_bytes": 3508868615,
+        "content_records": 518255,
+        "metadata_download_size_bytes": 81769080,
+        "metadata_records": 518255
+      },
+      "source_ids": [
+        "hf_minhdoan17_vietnamese_legal_documents",
+        "hf_vohuutridung_vietnamese_legal_documents"
+      ],
+      "tier": "B2",
+      "tier_name": "third_party_large_coverage_tvpl_derived_dataset"
+    },
+    {
+      "authority": "non_authoritative_third_party_dataset",
+      "batch_readability": "medium_to_high_but_large_single_parquet",
+      "best_for": [
+        "VBPL-derived candidate full text",
+        "Markdown conversion fallback",
+        "cross-checking official source gaps"
+      ],
+      "forbidden_usage": [
+        "official effective status conclusion",
+        "official original text authority"
+      ],
+      "formal_use_allowed": false,
+      "freshness_risk": "high_for_recent_legal_changes",
+      "observed_dataset_shape": {
+        "download_size_bytes": 683800072,
+        "fields": [
+          "Số ký hiệu",
+          "Tình trạng hiệu lực",
+          "html_content",
+          "markdown_content"
+        ],
+        "records": 61979
+      },
+      "source_ids": [
+        "hf_doanhieung_vbpl"
+      ],
+      "tier": "B3",
+      "tier_name": "third_party_vbpl_derived_text_fallback"
+    },
+    {
+      "authority": "non_authoritative_third_party_dataset",
+      "batch_readability": "high_but_low_coverage",
+      "best_for": [
+        "limited text comparison",
+        "model evaluation",
+        "supplementary corpus checks"
+      ],
+      "formal_use_allowed": false,
+      "freshness_risk": "high_for_compliance_coverage",
+      "observed_dataset_shape": {
+        "fields": [
+          "id",
+          "filename",
+          "title",
+          "type",
+          "content",
+          "content_length"
+        ],
+        "splits": {
+          "2021": 110,
+          "2023": 208,
+          "2026": 318
+        }
+      },
+      "source_ids": [
+        "hf_undertheseanlp_uts_vlc"
+      ],
+      "tier": "B4",
+      "tier_name": "third_party_limited_legal_corpus"
+    },
+    {
+      "authority": "non_authoritative_web_source",
+      "batch_readability": "low_to_medium_unstable_for_automation",
+      "best_for": [
+        "human-readable cross-check",
+        "editorial summaries",
+        "candidate original-text recovery when official parseable text is missing",
+        "candidate source discovery",
+        "paywalled or page-level text comparison"
+      ],
+      "forbidden_usage": [
+        "bulk official source ingestion",
+        "final legal conclusion",
+        "status authority without official verification"
+      ],
+      "formal_use_allowed": false,
+      "freshness_risk": "variable",
+      "source_ids": [
+        "thuvienphapluat_web",
+        "luatvietnam_web",
+        "lawnet_web"
+      ],
+      "tier": "C1",
+      "tier_name": "third_party_web_cross_check"
+    },
+    {
+      "authority": "non_authoritative_specialized_source",
+      "batch_readability": "limited_ids_are_opaque_search_may_be_blocked_or_rate_limited",
+      "best_for": [
+        "candidate QCVN/TCVN text",
+        "article extraction fallback",
+        "historical comparison with legacy work"
+      ],
+      "forbidden_usage": [
+        "official legal baseline",
+        "QCVN version currency conclusion",
+        "effective status verification"
+      ],
+      "formal_use_allowed": false,
+      "freshness_risk": "high",
+      "source_ids": [
+        "atld_hse_provider",
+        "legacy_hse_archive"
+      ],
+      "tier": "C2",
+      "tier_name": "specialized_non_official_hse_or_standard_text"
+    },
+    {
+      "authority": "not_a_legal_source",
+      "batch_readability": "variable",
+      "best_for": [
+        "relationship extraction training",
+        "retrieval evaluation",
+        "model experiments",
+        "tooling reference"
+      ],
+      "forbidden_usage": [
+        "source registry population",
+        "official clause extraction",
+        "current law or effective status conclusion",
+        "promotion request evidence except as tooling/evaluation appendix"
+      ],
+      "formal_use_allowed": false,
+      "freshness_risk": "not_applicable_for_formal_source_use",
+      "source_ids": [
+        "github_mlalab_vnlegaltext",
+        "hf_yuitc_vietnamese_legal_documents",
+        "hf_thangvip_combined_vietnamese_legal_text",
+        "github_tool_only_legal_agent_repositories"
+      ],
+      "tier": "D1",
+      "tier_name": "training_evaluation_or_tooling_dataset"
+    }
+  ],
+  "source_use_cascade": {
+    "comprehensive_legal_inventory_route": [
+      "When the user asks for a legal/regulatory catalogue, full legal database build, or does not know the applicable legal domain, do not ask the user to pick a domain first.",
+      "Start an official-source candidate inventory discovery workflow using A0/A1/A2/A3 source pathways and document-type coverage: laws, codes, decrees, circulars, decisions, resolutions, QCVN/technical regulations, and consolidated/replacement references where applicable.",
+      "Use third-party datasets only to find candidate document identifiers, titles, relationship hints, or coverage gaps; all inventory records must remain candidate until A-tier official identity verification succeeds.",
+      "Output only a candidate inventory discovery report and source-resolution evidence. Do not extract requirements, do not create checklist rows, and do not write live legal database rows in this step.",
+      "After candidate inventory review, derive applicability classes and requirements from official original text, preserving article/clause references and effective-status evidence."
+    ],
+    "effective_status_route": [
+      "Only A-tier sources may support an official effective status claim.",
+      "Third-party status fields may create a conflict flag but may not resolve the legal status.",
+      "Partial expiry or replacement chains must be reviewed at article/scope level before checklist impact is finalized."
+    ],
+    "general_legal_document_route": [
+      "If known VBPL doc_id exists, fetch A0 detail endpoint first and identity-gate the result.",
+      "If no known doc_id exists, use B1 metadata/relationships only to discover candidate doc_id/title/issuer/date, then verify through A0.",
+      "If A0 is missing or search is noisy, use A1 government portal/signed PDF and A2 gazette verification.",
+      "Use B2/B3/C1/C2 only as candidate discovery or comparison. Never promote from them without A-tier verification.",
+      "For every conflict, preserve all source observations and mark official_verification_pending until A-tier evidence resolves it."
+    ],
+    "new_2025_plus_document_route": [
+      "Expect third-party datasets to lag.",
+      "Prioritize A1 government portal, datafiles signed PDF, and A2 gazette when A0 does not yet index the document.",
+      "Use B1/B2 only to discover candidate metadata or later synchronization."
+    ],
+    "qcvn_and_technical_regulation_route": [
+      "Do not rely on direct QCVN number search alone.",
+      "Identify the issuing Circular/Thông tư through B1/B2 discovery or official ministry search.",
+      "Fetch the issuing Circular from A0/A1/A3 and extract the QCVN annex reference.",
+      "Verify QCVN version currency against A3 ministry or official publication evidence.",
+      "Use C2 ATLD/HSE only for candidate technical text extraction when official source is not yet available."
+    ]
+  },
+  "status": "source_pathway_manifest_only_no_legal_targets_not_live",
+  "task_id": "TASK-20260525-001",
+  "updated_at": "2026-05-24T20:45:00Z"
+}

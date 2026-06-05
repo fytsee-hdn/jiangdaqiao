@@ -1,0 +1,895 @@
+{
+  "authority_rules": {
+    "memory_is_authority": false,
+    "permission_source": "/Users/HY-yin/hermes-local/config/profiles/compliance_permission_model.v1.json",
+    "profile_source": "/Users/HY-yin/hermes-local/config/profiles/compliance.yaml",
+    "runtime_state_is_authority": false,
+    "session_history_is_authority": false,
+    "skills_source_root": "/Users/HY-yin/hermes-local/src/gsp_hermes/skills/compliance",
+    "soul_source": "/Users/HY-yin/hermes-local/src/hermes/gsp_compliance_agent/prompts/soul.md"
+  },
+  "capabilities": [
+    {
+      "capability_id": "identity_profile_runtime_boundary",
+      "display_name_zh": "身份、Profile、Runtime 边界说明",
+      "evidence_sources": [
+        "HERMES_ARCHITECTURE.md",
+        "config/profiles/compliance.yaml",
+        "scripts/check_task16_runtime_architecture_audit.py"
+      ],
+      "forbidden": [
+        "把 .hermes runtime 当 accepted authority",
+        "无证据宣称 runtime 正确"
+      ],
+      "should_do": [
+        "说明 compliance profile 与 accepted source",
+        "区分 hermes-local 和 .hermes runtime",
+        "无法验证时返回 BLOCKED"
+      ],
+      "skill_id": "compliance-runtime-governance",
+      "status": "LIVE_ALLOWED",
+      "user_examples": [
+        "你是谁",
+        "你的 SOUL 从哪里来",
+        "runtime 有没有被污染"
+      ]
+    },
+    {
+      "capability_id": "permission_and_access",
+      "display_name_zh": "权限和账号绑定查询",
+      "evidence_sources": [
+        "config/profiles/compliance_permission_model.v1.json",
+        "logs/compliance_access_gate.jsonl",
+        "access_requests/"
+      ],
+      "forbidden": [
+        "从 DM 访问推断管理员",
+        "从 memory/session 推断权限",
+        "agent 自授权"
+      ],
+      "should_do": [
+        "读取 permission model",
+        "匹配 WeCom binding",
+        "返回 role/action/approval authority"
+      ],
+      "skill_id": "compliance-permission-and-access",
+      "status": "LIVE_ALLOWED",
+      "user_examples": [
+        "我是什么级别",
+        "我能不能审批",
+        "如何申请权限"
+      ]
+    },
+    {
+      "capability_id": "wecom_intent_and_out_of_scope_isolation",
+      "display_name_zh": "WeCom 交互、意图路由、非相关问题隔离",
+      "evidence_sources": [
+        "artifacts/candidate/task15_interaction_intent_router.v1.json",
+        "artifacts/candidate/task15_wecom_e2e_workflows.v1.json"
+      ],
+      "forbidden": [
+        "回答天气或闲聊实质内容",
+        "调用无关工具满足非 profile 请求",
+        "把模糊审批当有效审批"
+      ],
+      "should_do": [
+        "先评估用户目的是否属于 compliance profile",
+        "隔离天气/闲聊/生活建议等非相关问题",
+        "对模糊目的先澄清",
+        "对 controlled action 检查 role"
+      ],
+      "skill_id": "compliance-wecom-intent-router",
+      "status": "LIVE_ALLOWED",
+      "user_examples": [
+        "查 candidate checklist",
+        "我要提交更新",
+        "天气怎么样",
+        "推荐餐厅"
+      ]
+    },
+    {
+      "capability_id": "source_lifecycle",
+      "display_name_zh": "Source Intake、Registry、Archive",
+      "evidence_sources": [
+        "artifacts/candidate/task11_source_registry_archive.v1.json",
+        "schemas/source_lifecycle/source_registry.schema.json",
+        "manifests/canonical_sources.json",
+        "docs/state/approved_sources.md"
+      ],
+      "forbidden": [
+        "直接写 canonical source",
+        "自动 promote source",
+        "宣称 source sufficient",
+        "把 .hermes workspace、Desktop 或 artifacts/candidate 当 approved live source"
+      ],
+      "should_do": [
+        "优先使用 intake_source_files 摄入上传源文件并计算 sha256，避免 shell 解压/拷贝",
+        "分类 source type 和 source_kind，区分 customer_requirement 与 legal_source",
+        "区分 knowledge_source_upload 与 structured_database_build",
+        "要求 path/owner/origin/version/hash",
+        "准备 candidate inventory/archive",
+        "普通真实试用 source 问题默认 BLOCKED，直到 live source manifest 和批准记录存在",
+        "明确非 live 检查时标注 RUNTIME_WORKSPACE_NOT_LIVE 或 CANDIDATE_ONLY"
+      ],
+      "skill_id": "compliance-source-lifecycle",
+      "status": "CANDIDATE_ONLY",
+      "user_examples": [
+        "登记 source",
+        "准备 archive record",
+        "列出 source registry 缺口"
+      ]
+    },
+    {
+      "capability_id": "live_data_promotion_request_intake",
+      "display_name_zh": "Live Data Promotion Request Intake、Preliminary Review、Codex Handoff",
+      "evidence_sources": [
+        "config/profiles/compliance_permission_model.v1.json",
+        "config/profiles/compliance_capability_map.v1.json",
+        "src/gsp_hermes/skills/compliance/compliance-live-data-promotion-request/SKILL.md"
+      ],
+      "forbidden": [
+        "Hermes 直接写 live root",
+        "Hermes 直接用 write_file/patch/terminal 写 promotion_requests queue",
+        "Hermes 更新 live manifest/capability map/baseline",
+        "把客户源文件上传当数据库构建完成",
+        "把 request submission 当 promotion approval",
+        "把 preliminary review 当 Codex verification"
+      ],
+      "should_do": [
+        "检查 submit_promotion_request 权限",
+        "提交前必须判断客户标准/法律文件/数据库产物并填写 source_kind 和 source_classification_reason",
+        "提交前必须判断 promotion_scope：knowledge_source_upload 只是客户源文件上传，structured_database_build 才需要条款/检查项/风险/数据库产物",
+        "收集 source path/hash 或 source_files、owner、version、data family、intended live scope",
+        "把临时库、manifest、validation artifact 放在 runtime workspace promotion_artifacts 下",
+        "用 submit_promotion_request 提交 request queue packet",
+        "必要时用 withdraw_promotion_request 或 amend_promotion_request 管理待审请求",
+        "Codex CANDIDATE_PASS 后用 create_p3_approval_request 生成 P3 审批请求",
+        "P3 明确批准/拒绝/要求修改时用 record_promotion_approval 记录决定",
+        "做 preliminary material completeness review",
+        "把请求标注为 CODEX_REVIEW_REQUIRED",
+        "说明 P3 human approval 才能最终 promotion"
+      ],
+      "skill_id": "compliance-live-data-promotion-request",
+      "status": "LIVE_ALLOWED_INTAKE_ONLY",
+      "user_examples": [
+        "把这个 source 转正",
+        "提交正式数据申请",
+        "让这个 checklist 变成 live data",
+        "申请 promotion"
+      ]
+    },
+    {
+      "capability_id": "legal_customer_pipeline",
+      "display_name_zh": "Legal / Customer Source Pipeline",
+      "evidence_sources": [
+        "artifacts/candidate/task11_customer_standard_pipeline.v1.json",
+        "artifacts/candidate/task11_legal_source_pipeline.v1.json",
+        "/Users/HY-yin/hermes-local/config/profiles/legal_acquisition/vietnam_legal_clause_acquisition_sources.v1.json",
+        "/Users/HY-yin/hermes-local/config/profiles/legal_acquisition/hermes_fetch_prompt.v1.zh.md",
+        "manifests/canonical_sources.json",
+        "docs/state/approved_sources.md",
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/source_manifests/legal_sources/vietnam_legal_document_index-2026_05_25.manifest.json",
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/legal_index.sqlite",
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/crosswalk/a0_b1_crosswalk.sqlite",
+        "/Users/HY-yin/hermes-local/config/profiles/legal_acquisition/legal_source_priority_classification_standard.v1.zh.md",
+        "/Users/HY-yin/hermes-local/src/gsp_hermes/skills/compliance/compliance-legal-customer-pipeline/references/legal_source_priority_classification_standard.v1.zh.md"
+      ],
+      "forbidden": [
+        "法律意见",
+        "compliance conclusion",
+        "直接 formal database update",
+        "把 candidate pipeline 或 .hermes workspace JSONL 当 live legal/customer requirement"
+      ],
+      "should_do": [
+        "Use the live legal document index for legal-document metadata, source coverage, and VBPL/A0/B1 identity checks.",
+        "Treat A0/VBPL official metadata as primary and B1 as discovery-only.",
+        "Use the live crosswalk `vbpl_missing_monitor_records` for focused VBPL-missing monitoring.",
+        "BLOCK legal text, clause, requirement, risk, checklist, compliance, and legal-advice answers until official text archives and clause datasets are separately promoted.",
+        "Read the legal source and priority classification standard before legal/regulatory/QCVN/source-priority work.",
+        "Use historical Hermes legal priority refs and legal atoms only as priority and coverage hints.",
+        "Use canonical legal metadata index as the default legal document metadata count/query target."
+      ],
+      "skill_id": "compliance-legal-customer-pipeline",
+      "status": "LIVE_ALLOWED_FOR_LEGAL_DOCUMENT_INDEX_METADATA_ONLY",
+      "user_examples": [
+        "整理客户标准条款",
+        "生成 legal clause candidate",
+        "记录 legal update signal",
+        "你现在有获取法律条款的来源吗",
+        "开始越南法律官方原文和条款候选抓取"
+      ]
+    },
+    {
+      "capability_id": "requirement_atom_department_applicability",
+      "display_name_zh": "Requirement、Atom、Department、Applicability Model",
+      "evidence_sources": [
+        "artifacts/candidate/task12_iway_requirement_model.v1.json",
+        "artifacts/candidate/task12_atom_risk_department_applicability.v1.json"
+      ],
+      "forbidden": [
+        "risk rating",
+        "applicability conclusion",
+        "accepted checklist/SOP output"
+      ],
+      "should_do": [
+        "准备 requirement/atom/department/applicability-hook draft",
+        "保留 source links",
+        "标明 Task 13 dependency"
+      ],
+      "skill_id": "compliance-requirement-atomization",
+      "status": "CANDIDATE_ONLY",
+      "user_examples": [
+        "拆成 atoms",
+        "对应哪个 department",
+        "生成 applicability hook"
+      ]
+    },
+    {
+      "capability_id": "candidate_database_read_only_query",
+      "display_name_zh": "Candidate Compliance Database 只读查询",
+      "evidence_sources": [
+        "artifacts/candidate/fast_query_tool_design.v1.json",
+        "artifacts/candidate/task8_production_query_reliability.v1.json"
+      ],
+      "forbidden": [
+        "从 memory/session/chat 回答数据库事实",
+        "把 Hermes state.db 当 product database",
+        "把 Documents/artifacts/candidate 当真实试用数据库",
+        "把 legacy reset candidate 当 live database",
+        "从查询结果做合规结论"
+      ],
+      "should_do": [
+        "For legal document metadata and coverage queries, use the live legal document index under hermes-local.",
+        "For legal text, clauses, requirements, checklists, risks, or compliance conclusions, return BLOCKED until separate live promotion exists.",
+        "Never answer from .hermes candidate artifacts when a live legal index exists unless the user explicitly requests candidate inspection."
+      ],
+      "skill_id": "compliance-database-query",
+      "status": "LIVE_ALLOWED_FOR_LEGAL_DOCUMENT_INDEX_METADATA_ONLY",
+      "user_examples": [
+        "数据库有多少条 checklist",
+        "查 EHS department",
+        "某个 ID 的 traceability"
+      ]
+    },
+    {
+      "capability_id": "candidate_database_build_coordination",
+      "display_name_zh": "Candidate Database Build / Update Coordination",
+      "evidence_sources": [
+        "artifacts/candidate/task12_output_engine_contracts.v1.json",
+        "scripts/compliance_product_workbench.py",
+        "/Users/HY-yin/hermes-local/src/hermes/gsp_compliance_agent/runtime/candidate_sqlite_artifact_guard.py"
+      ],
+      "forbidden": [
+        "accepted database write",
+        "production update",
+        "LLM prose 直接生成业务行",
+        "跳过 QC"
+      ],
+      "should_do": [
+        "确认 canonical source manifest 和 builder config",
+        "准备 build readiness checklist",
+        "协调 deterministic builder",
+        "candidate SQLite 写入后必须执行 conn.commit、PRAGMA wal_checkpoint(TRUNCATE)、只读重开和实读计数验证",
+        "manifest/final reply 数值必须来自落盘 SQLite 实读，不得来自内存 expected values",
+        "用 candidate_sqlite_artifact_guard.py 只读校验 manifest、DB hash 和表计数一致性"
+      ],
+      "skill_id": "compliance-database-build-coordination",
+      "status": "CANDIDATE_ONLY",
+      "user_examples": [
+        "准备 build candidate database",
+        "更新数据库需要哪些 gate",
+        "builder 缺什么输入"
+      ]
+    },
+    {
+      "capability_id": "validation_qc_failure_injection",
+      "display_name_zh": "Validation、QC、Failure Injection",
+      "evidence_sources": [
+        "artifacts/candidate/task12_database_validation_suite.v1.json",
+        "scripts/check_task12_final_verification.py",
+        "/Users/HY-yin/hermes-local/src/hermes/gsp_compliance_agent/runtime/candidate_sqlite_artifact_guard.py"
+      ],
+      "forbidden": [
+        "使用 APPROVED/COMPLIANT/AUDIT_PASS 作为结论",
+        "用 chat summary 代替 validator output"
+      ],
+      "should_do": [
+        "使用 deterministic validators",
+        "读取 validator output",
+        "只使用 BLOCKED/FAILED/CANDIDATE_PASS",
+        "报告 evidence path",
+        "validation_findings 写入前检查 severity 非空",
+        "validation artifact 的 total_checks 和 DB hash 必须从只读重开的 SQLite 实读"
+      ],
+      "skill_id": "compliance-validation-qc",
+      "status": "LIVE_ALLOWED",
+      "user_examples": [
+        "跑 validator",
+        "检查 stale index",
+        "为什么 gate FAILED"
+      ]
+    },
+    {
+      "capability_id": "promotion_rollback_accepted_output_gate",
+      "display_name_zh": "Promotion、Rollback、Accepted-Output Gate",
+      "evidence_sources": [
+        "artifacts/candidate/task7_promotion_gate_protocol.v1.json",
+        "artifacts/candidate/task14_approval_promotion_flow.v1.json"
+      ],
+      "forbidden": [
+        "未批准 real accepted write",
+        "promotion 到 .hermes",
+        "business conclusion"
+      ],
+      "should_do": [
+        "检查 source hashes/traceability/validator/audit/P3 approval/rollback plan",
+        "区分 simulation 和 real write"
+      ],
+      "skill_id": "compliance-promotion-rollback",
+      "status": "CANDIDATE_ONLY",
+      "user_examples": [
+        "这个 candidate 能不能 promotion",
+        "模拟 rollback",
+        "promotion 被 block 的原因"
+      ]
+    },
+    {
+      "capability_id": "review_packet_workbench_handoff",
+      "display_name_zh": "Review Packet、Workbench、Human Handoff",
+      "evidence_sources": [
+        "artifacts/candidate/task14_review_packet_standard.v1.json",
+        "artifacts/candidate/task14_review_workbench_mvp.v1.json"
+      ],
+      "forbidden": [
+        "把 packet creation 当 approval",
+        "删除 uncertainty/source hash requirement"
+      ],
+      "should_do": [
+        "准备 source refs/source hashes/uncertainty/reviewer role/required decision",
+        "输出 candidate review views",
+        "Codex CANDIDATE_PASS 后创建 create_p3_approval_request",
+        "P3 在 WeCom 内明确批准/拒绝/要求修改后记录 record_promotion_approval"
+      ],
+      "skill_id": "compliance-review-handoff",
+      "status": "CANDIDATE_ONLY",
+      "user_examples": [
+        "生成 review packet",
+        "列出 review queue",
+        "准备 human handoff"
+      ]
+    },
+    {
+      "capability_id": "factory_scope_risk_improvement_loop",
+      "display_name_zh": "Factory Scope、Risk Candidate、Improvement Loop",
+      "evidence_sources": [
+        "artifacts/candidate/task13_factory_scope_area_inventory.v1.json",
+        "artifacts/candidate/task13_risk_list_engine.v1.json"
+      ],
+      "forbidden": [
+        "risk rating conclusion",
+        "applicability conclusion",
+        "accepted factory profile"
+      ],
+      "should_do": [
+        "准备 factory/area/audit atom/risk/improvement candidates",
+        "保持 risk rating unknown",
+        "标明 human assessment requirement"
+      ],
+      "skill_id": "compliance-factory-risk",
+      "status": "CANDIDATE_ONLY",
+      "user_examples": [
+        "建立 factory profile candidate",
+        "生成 risk candidate",
+        "准备 onsite assessment"
+      ]
+    },
+    {
+      "capability_id": "monitoring_recovery_go_live_readiness",
+      "display_name_zh": "Monitoring、Recovery、Go-Live Readiness",
+      "evidence_sources": [
+        "artifacts/candidate/task9_go_live_approval_packet.v1.json",
+        "artifacts/candidate/task15_monitoring_recovery.v1.json"
+      ],
+      "forbidden": [
+        "未审批 restore",
+        "未批准 real notification/probe",
+        "无 evidence 的 go-live claim"
+      ],
+      "should_do": [
+        "读取 governance/readiness checks",
+        "总结 monitoring/recovery protocol",
+        "restore/probe/notification 要求审批"
+      ],
+      "skill_id": "compliance-monitoring-recovery",
+      "status": "LIVE_ALLOWED",
+      "user_examples": [
+        "gateway 健康吗",
+        "go-live readiness 到哪一步",
+        "备份恢复需要什么审批"
+      ]
+    },
+    {
+      "capability_id": "runtime_architecture_contamination_prevention",
+      "display_name_zh": "Runtime Architecture、Gateway Isolation、Contamination Prevention",
+      "evidence_sources": [
+        "scripts/check_runtime_governance.py",
+        "scripts/check_task16_runtime_architecture_audit.py"
+      ],
+      "forbidden": [
+        "generic gateway label",
+        "root/default .hermes authority",
+        "generic bundled skills 污染",
+        "access gate fail-open"
+      ],
+      "should_do": [
+        "检查 LaunchAgent/HERMES_HOME/source SOUL binding/no-bundled-skills/read-only skill binding/runtime memory contamination"
+      ],
+      "skill_id": "compliance-runtime-governance",
+      "status": "LIVE_ALLOWED",
+      "user_examples": [
+        "runtime skills 有没有污染",
+        "gateway label 是否隔离",
+        "还在读 .hermes soul 吗"
+      ]
+    },
+    {
+      "capability_id": "controlled_self_improvement_skill_proposal",
+      "display_name_zh": "Controlled Self-Improvement / Skill Proposal Lifecycle",
+      "evidence_sources": [
+        "artifacts/candidate/hermes_compliance_skill_lifecycle_policy.v1.md",
+        "artifacts/candidate/hermes_compliance_skill_lifecycle_rules.v1.json"
+      ],
+      "forbidden": [
+        "直接 self-promote",
+        "只写 memory 当 skill",
+        "未经审批更新 runtime policy"
+      ],
+      "should_do": [
+        "从 logs/evidence 总结 observation",
+        "起草 candidate skill proposal",
+        "写 accepted source 前等待审批"
+      ],
+      "skill_id": "compliance-skill-proposal",
+      "status": "LIVE_ALLOWED",
+      "user_examples": [
+        "总结刚才暴露的问题",
+        "变成 skill proposal",
+        "以后如何避免同类问题"
+      ]
+    }
+  ],
+  "database_artifact_policy": {
+    "accepted_live_root_required_prefix": "/Users/HY-yin/hermes-local/data/knowledge/compliance/",
+    "candidate_artifacts_must_be_labeled": [
+      "CANDIDATE_ONLY",
+      "TEST_DATA"
+    ],
+    "candidate_artifacts_require_explicit_user_target": true,
+    "core_database_resolution_note": "Resolve the current default core database from the live knowledge-base catalog at query time.",
+    "core_database_resolution_source": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+    "core_database_version_hardcoding_forbidden": true,
+    "default_core_database_entry_id": "core_databases:gsp_compliance_core_database_v1:2026_06_03_iway_three_files_atom_repair",
+    "default_legal_metadata_query_target": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/canonical/legal_document_canonical_index.sqlite",
+    "default_real_trial_database_query": "LIVE_ALLOWED_GSP_CORE_DATABASE_AND_LEGAL_METADATA_INDEX",
+    "forbidden_live_roots": [
+      "/Users/HY-yin/Documents/Codex-Compliance-System/artifacts/candidate/"
+    ],
+    "gsp_compliance_core_database_v1_db": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/core_databases/gsp_compliance_core_database_v1/2026_06_03_iway_three_files_atom_repair/gsp_compliance_core_database_v1.sqlite",
+    "knowledge_base_catalog": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+    "legal_document_metadata_queries": "LIVE_ALLOWED_METADATA_ONLY. Use the canonical legal document metadata index by default. The raw A0/B1 index is source-lineage evidence, not the default count. Legal text, clauses, requirements, risks, and compliance conclusions remain BLOCKED.",
+    "live_database_configured": true,
+    "live_database_scope": "legal_document_canonical_metadata_index_and_gsp_compliance_core_database"
+  },
+  "default_result_statuses": [
+    "BLOCKED",
+    "FAILED",
+    "CANDIDATE_PASS"
+  ],
+  "description": "Accepted capability map for the Hermes compliance agent. It defines what the live user may ask, how the agent should route or refuse, and which evidence sources are required.",
+  "forbidden_result_statuses": [
+    "APPROVED",
+    "COMPLIANT",
+    "LEGAL_CONCLUSION",
+    "AUDIT_PASS",
+    "FINAL_APPROVAL"
+  ],
+  "last_legacy_third_party_dataset_archive_at": "2026-06-04T02:28:07Z",
+  "legacy_third_party_legal_index_policy": {
+    "archive_run_id": "legacy_third_party_archive_20260604T022807Z",
+    "chatbot_query_enabled": false,
+    "crosswalk_entry_id": "legal_sources:vietnam_a0_b1_crosswalk:2026_05_25",
+    "current_authoritative_metadata_entry_id": "legal_sources:vietnam_legal_document_canonical_index:2026_05_25",
+    "default_query_enabled": false,
+    "raw_entry_id": "legal_sources:vietnam_legal_document_index:2026_05_25",
+    "status": "ARCHIVED_THIRD_PARTY_DISCOVERY_ONLY"
+  },
+  "live_business_data_policy": {
+    "accepted_live_root_required_prefix": "/Users/HY-yin/hermes-local/data/knowledge/compliance/",
+    "approved_sources_register": "/Users/HY-yin/Documents/Codex-Compliance-System/docs/state/approved_sources.md",
+    "candidate_or_runtime_inspection_must_be_labeled": [
+      "RUNTIME_WORKSPACE_NOT_LIVE",
+      "CANDIDATE_ONLY",
+      "TEST_DATA"
+    ],
+    "candidate_or_runtime_inspection_requires_explicit_user_target": true,
+    "canonical_legal_document_index_configured": true,
+    "canonical_legal_document_index_db": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/canonical/legal_document_canonical_index.sqlite",
+    "canonical_legal_document_index_manifest": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/canonical/legal_document_canonical_index.manifest.v1.json",
+    "canonical_sources_manifest": "/Users/HY-yin/Documents/Codex-Compliance-System/manifests/canonical_sources.json",
+    "compliance_core_database_configured": true,
+    "core_database_first_query_policy": {
+      "core_database_resolution_source": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+      "core_database_version_hardcoding_forbidden": true,
+      "default_core_database_entry_id": "core_databases:gsp_compliance_core_database_v1:2026_06_03_iway_three_files_atom_repair",
+      "default_core_database_entry_id_source": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+      "first_query_tables": [
+        "atom_factory_area_applicability_map",
+        "compliance_atom_master",
+        "legal_mapping",
+        "subject_profile_action_map",
+        "evidence_requirement_master"
+      ],
+      "legal_database_role": "SECONDARY_SUPPORT_AFTER_CORE_DATABASE_ROWS_ARE_RETRIEVED",
+      "status": "LIVE_REQUIRED_FOR_FACTORY_AREA_EQUIPMENT_IWAY_EXECUTION_QUERIES"
+    },
+    "core_database_query_policy": {
+      "allowed_use": [
+        "IWAY-led clause interpretation lookup",
+        "requirement atom lookup from promoted GSP core database",
+        "factory-area applicability lookup across multiple blocks",
+        "subject profile action mapping lookup",
+        "audit-preparation and training-preparation notes"
+      ],
+      "blocked_use": [
+        "final legal opinion",
+        "confirmed compliance conclusion",
+        "audit-pass claim",
+        "claiming Legal Owner approval",
+        "claiming subject-profile applicability without owner confirmation"
+      ],
+      "operator_note_cn": "GSP Compliance Core Database v1 is a formal live query target; future changes should be applied as controlled updates.",
+      "status": "LIVE_ALLOWED"
+    },
+    "core_database_resolution_note": "Resolve the current default core database from the live knowledge-base catalog at query time.",
+    "core_database_resolution_source": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+    "core_database_version_hardcoding_forbidden": true,
+    "covered_datasets": [
+      "source_register",
+      "legal_sources",
+      "customer_requirements",
+      "checklists",
+      "gsp_standards",
+      "evidence_matrix",
+      "factory_risk_records",
+      "compliance_product_database"
+    ],
+    "default_core_database_entry_id": "core_databases:gsp_compliance_core_database_v1:2026_06_03_iway_three_files_atom_repair",
+    "default_gsp_compliance_core_database_entry_id": "core_databases:gsp_compliance_core_database_v1:2026_06_03_iway_three_files_atom_repair",
+    "default_legal_metadata_query_target": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/canonical/legal_document_canonical_index.sqlite",
+    "gsp_compliance_core_database_v1_db": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/core_databases/gsp_compliance_core_database_v1/2026_06_03_iway_three_files_atom_repair/gsp_compliance_core_database_v1.sqlite",
+    "gsp_compliance_core_database_v1_manifest": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/core_databases/gsp_compliance_core_database_v1/2026_06_03_iway_three_files_atom_repair/gsp_compliance_core_database_v1.manifest.json",
+    "historical_hermes_legal_data_use": "priority_and_coverage_reference_only_not_official_source_or_clause_or_requirement",
+    "knowledge_base_catalog": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+    "last_runtime_policy_sync_at": "2026-06-03T11:00:41.985734+00:00",
+    "legal_document_metadata_queries": "LIVE_ALLOWED_METADATA_ONLY. Use the canonical legal document metadata index by default. The raw A0/B1 index is source-lineage evidence, not the default count. Legal text, clauses, requirements, risks, and compliance conclusions remain BLOCKED.",
+    "legal_source_priority_classification_standard": "/Users/HY-yin/hermes-local/config/profiles/legal_acquisition/legal_source_priority_classification_standard.v1.zh.md",
+    "legal_source_priority_classification_standard_status": "ACCEPTED_HERMES_RUNTIME_REFERENCE",
+    "live_business_data_configured": true,
+    "live_database_configured": true,
+    "live_database_scope": "legal_document_canonical_metadata_index_and_gsp_compliance_core_database",
+    "live_legal_crosswalk_db": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/crosswalk/a0_b1_crosswalk.sqlite",
+    "live_legal_document_index_configured": true,
+    "live_legal_document_index_db": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/legal_index.sqlite",
+    "live_legal_document_index_manifest": "/Users/HY-yin/hermes-local/data/knowledge/compliance/source_manifests/legal_sources/vietnam_legal_document_index-2026_05_25.manifest.json",
+    "live_source_file_scope": [
+      "customer_requirements:ikea_iway:editions_2019_2024",
+      "customer_requirements:ikea_iway_agent_readable_requirements:2026_05_25"
+    ],
+    "live_source_files_configured": true,
+    "non_authoritative_roots": [
+      "/Users/HY-yin/.hermes/profiles/compliance/workspace/data/knowledge/compliance/",
+      "/Users/HY-yin/.hermes/profiles/compliance/workspace/promotion_artifacts/",
+      "/Users/HY-yin/Documents/Codex-Compliance-System/artifacts/candidate/",
+      "/Users/HY-yin/Desktop/"
+    ],
+    "ordinary_real_trial_business_queries": "LIVE_ALLOWED_WHEN_ANSWER_USES_PROMOTED_GSP_CORE_DATABASE_OR_LIVE_LEGAL_METADATA_INDEX",
+    "required_promotion_evidence": [
+      "source_path",
+      "source_hash",
+      "source_files_for_multi_file_sets",
+      "source_kind",
+      "source_classification_reason",
+      "promotion_scope",
+      "temp_db_path_when_candidate_data_generated",
+      "validation_artifact_path_when_candidate_data_generated",
+      "schema_validation",
+      "review_status",
+      "approval_record",
+      "live_manifest",
+      "rollback_plan"
+    ],
+    "source_file_only_query_policy": "Approved source-file existence and metadata may be answered from the live source manifest. For promoted GSP core database families, ordinary real-trial factory/area/equipment/IWAY execution questions must query the live GSP core database first. Legal advice, compliance conclusions, audit-pass claims, and Legal Owner approval claims remain blocked."
+  },
+  "live_data": {
+    "compliance_core_database_configured": true,
+    "core_database_first_query_policy": {
+      "core_database_resolution_source": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+      "core_database_version_hardcoding_forbidden": true,
+      "default_core_database_entry_id": "core_databases:gsp_compliance_core_database_v1:2026_06_03_iway_three_files_atom_repair",
+      "default_core_database_entry_id_source": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+      "first_query_tables": [
+        "atom_factory_area_applicability_map",
+        "compliance_atom_master",
+        "legal_mapping",
+        "subject_profile_action_map",
+        "evidence_requirement_master"
+      ],
+      "legal_database_role": "SECONDARY_SUPPORT_AFTER_CORE_DATABASE_ROWS_ARE_RETRIEVED",
+      "status": "LIVE_REQUIRED_FOR_FACTORY_AREA_EQUIPMENT_IWAY_EXECUTION_QUERIES"
+    },
+    "core_database_query_policy": {
+      "allowed_use": [
+        "IWAY-led clause interpretation lookup",
+        "requirement atom lookup from promoted GSP core database",
+        "factory-area applicability lookup across multiple blocks",
+        "subject profile action mapping lookup",
+        "audit-preparation and training-preparation notes"
+      ],
+      "blocked_use": [
+        "final legal opinion",
+        "confirmed compliance conclusion",
+        "audit-pass claim",
+        "claiming Legal Owner approval",
+        "claiming subject-profile applicability without owner confirmation"
+      ],
+      "operator_note_cn": "Core database is live; future changes should be applied as controlled updates.",
+      "status": "LIVE_ALLOWED"
+    },
+    "core_database_resolution_note": "Resolve the current default core database from the live knowledge-base catalog at query time.",
+    "core_database_resolution_source": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+    "core_database_version_hardcoding_forbidden": true,
+    "default_core_database_entry_id": "core_databases:gsp_compliance_core_database_v1:2026_06_03_iway_three_files_atom_repair",
+    "default_gsp_compliance_core_database_entry_id": "core_databases:gsp_compliance_core_database_v1:2026_06_03_iway_three_files_atom_repair",
+    "gsp_compliance_core_database_v1_db": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/core_databases/gsp_compliance_core_database_v1/2026_06_03_iway_three_files_atom_repair/gsp_compliance_core_database_v1.sqlite",
+    "gsp_compliance_core_database_v1_manifest": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/core_databases/gsp_compliance_core_database_v1/2026_06_03_iway_three_files_atom_repair/gsp_compliance_core_database_v1.manifest.json",
+    "last_runtime_policy_sync_at": "2026-06-03T11:00:41.985751+00:00",
+    "live_business_data_configured": true,
+    "live_database_scope": "legal_document_canonical_metadata_index_and_gsp_compliance_core_database"
+  },
+  "live_database_artifacts": [
+    {
+      "allowed_use": [
+        "historical source reconciliation",
+        "third-party discovery gap lead review",
+        "rollback/audit evidence"
+      ],
+      "artifact_id": "legal_sources:vietnam_legal_document_index:2026_05_25",
+      "artifact_type": "sqlite",
+      "blocked_use": [
+        "GSP atom generation",
+        "chatbot retrieval",
+        "clause-level answer",
+        "compliance conclusion",
+        "default legal metadata query",
+        "factory compliance answer",
+        "legal advice",
+        "legal clause count",
+        "official legal source",
+        "official legal text answer",
+        "requirement decomposition",
+        "risk rating"
+      ],
+      "chatbot_query_enabled": false,
+      "data_family": "legal_sources",
+      "formal_knowledge_base_member": false,
+      "live_query_enabled": false,
+      "manifest": "/Users/HY-yin/hermes-local/data/knowledge/compliance/source_manifests/legal_sources/vietnam_legal_document_index-2026_05_25.manifest.json",
+      "path": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/legal_index.sqlite",
+      "previous_status": "LIVE_READ_ONLY_METADATA_INDEX",
+      "sha256": "0fc93d9b54af656bb8db5b087fdc941efcc382353dde126ce43e0e841b6885b2",
+      "status": "ARCHIVED_THIRD_PARTY_DISCOVERY_ONLY"
+    },
+    {
+      "allowed_use": [
+        "historical A0/B1 reconciliation evidence",
+        "gap sample review before official-source verification",
+        "rollback/audit evidence"
+      ],
+      "artifact_id": "legal_sources:vietnam_a0_b1_crosswalk:2026_05_25",
+      "artifact_type": "sqlite",
+      "blocked_use": [
+        "GSP atom generation",
+        "chatbot retrieval",
+        "compliance conclusion",
+        "default legal metadata query",
+        "factory compliance answer",
+        "legal advice",
+        "legal clause count",
+        "treating B1 as official law"
+      ],
+      "chatbot_query_enabled": false,
+      "data_family": "legal_sources",
+      "formal_knowledge_base_member": false,
+      "live_query_enabled": false,
+      "manifest": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/crosswalk/a0_b1_crosswalk.manifest.v2.json",
+      "path": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/crosswalk/a0_b1_crosswalk.sqlite",
+      "previous_status": "LIVE_READ_ONLY_METADATA_INDEX_CROSSWALK",
+      "sha256": "45fd93d2e8c24e65deeec737e1845c055938eda47f7516b769b6d8c5af86e3ce",
+      "status": "ARCHIVED_THIRD_PARTY_CROSSWALK_TRACEABILITY_ONLY"
+    },
+    {
+      "allowed_use": [
+        "default legal document metadata lookup",
+        "canonical legal document counts",
+        "VBPL coverage and source identity checks",
+        "official text acquisition prioritization"
+      ],
+      "artifact_id": "legal_sources:vietnam_legal_document_canonical_index:2026_05_25",
+      "artifact_type": "sqlite",
+      "blocked_use": [
+        "official legal text answer",
+        "clause-level answer",
+        "requirement decomposition",
+        "risk rating",
+        "legal advice",
+        "compliance conclusion"
+      ],
+      "data_family": "legal_sources",
+      "default_query_target": true,
+      "manifest": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/canonical/legal_document_canonical_index.manifest.v1.json",
+      "path": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25/canonical/legal_document_canonical_index.sqlite",
+      "sha256": "755e6dc765c146bef0265ae13009b8cc1b23f23c1725d692d1107905e23b6495",
+      "status": "LIVE_READ_ONLY_CANONICAL_METADATA_INDEX"
+    }
+  ],
+  "live_source_promotion_layout": {
+    "approval_records_root": "/Users/HY-yin/hermes-local/data/knowledge/compliance/approval_records/",
+    "current_source_manifest": "/Users/HY-yin/hermes-local/data/knowledge/compliance/source_manifests/customer_requirements/ikea_iway_agent_readable_requirements-2026_05_25.manifest.json",
+    "current_source_set_id": "customer_requirements:ikea_iway_agent_readable_requirements:2026_05_25",
+    "database_build_requires_separate_promotion_scope": true,
+    "knowledge_base_catalog": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.json",
+    "knowledge_base_catalog_markdown": "/Users/HY-yin/hermes-local/data/knowledge/compliance/knowledge_base_catalog.v1.md",
+    "knowledge_source_upload_must_not_write_database": true,
+    "knowledge_source_upload_target": "sources/<data_family>/<source_slug>/<version>/",
+    "layout_document": "/Users/HY-yin/Documents/Codex-Compliance-System/LIVE_SOURCE_PROMOTION_LAYOUT_20260525.md",
+    "legal_sources_database_root": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/legal_sources/vietnam_legal_document_index/2026_05_25",
+    "live_root": "/Users/HY-yin/hermes-local/data/knowledge/compliance/",
+    "source_files_root": "/Users/HY-yin/hermes-local/data/knowledge/compliance/sources/",
+    "source_manifests_root": "/Users/HY-yin/hermes-local/data/knowledge/compliance/source_manifests/",
+    "status": "populated_source_files",
+    "structured_database_build_target": "databases/<data_family>/<version>/",
+    "structured_databases_root": "/Users/HY-yin/hermes-local/data/knowledge/compliance/databases/"
+  },
+  "out_of_scope_isolation": {
+    "classifier_allowed": true,
+    "classifier_may_call_external_tools": false,
+    "classifier_output_only": [
+      "in_scope",
+      "out_of_scope",
+      "needs_clarification",
+      "reason",
+      "suggested_route"
+    ],
+    "examples": [
+      "天气",
+      "新闻",
+      "股票",
+      "旅游",
+      "餐厅",
+      "购物",
+      "写诗",
+      "闲聊",
+      "泛娱乐",
+      "普通生活助手问题"
+    ],
+    "required_before_answer_or_tool_use": true,
+    "required_behavior": "Out-of-scope requests must be isolated with a profile-boundary response and must not be answered with weather/search/general assistant content."
+  },
+  "profile": "compliance",
+  "promotion_request_workflow": {
+    "allowed_request_statuses": [
+      "BLOCKED",
+      "PRELIMINARY_REVIEW_INCOMPLETE",
+      "PROMOTION_REQUEST_SUBMITTED",
+      "CODEX_REVIEW_REQUIRED",
+      "WITHDRAWN",
+      "SUPERSEDED",
+      "AMENDED"
+    ],
+    "amend_action_id": "amend_promotion_request",
+    "amend_minimum_role_id": "P1",
+    "approval_action_id": "approve_promotion",
+    "approval_channel": "codex_thread_only",
+    "approval_minimum_role_id": "P3",
+    "approval_notification_enabled": false,
+    "codex_required_actions": [
+      "verify_source_hashes",
+      "run_schema_and_source_fidelity_checks",
+      "check_traceability_and_stale_indexes",
+      "check_forbidden_fixture_contamination",
+      "prepare_promotion_packet",
+      "create_p3_approval_request_after_candidate_pass",
+      "record_codex_thread_p3_approval_only",
+      "treat_wecom_approval_notifications_and_replies_as_invalid",
+      "apply_approved_live_write",
+      "update_live_manifest",
+      "update_runtime_baseline",
+      "run_governance_checks",
+      "restart_gateway"
+    ],
+    "codex_thread_approval_marker": "codex_thread_approval_only_wecom_push_disabled",
+    "database_build_scopes": [
+      "structured_database_build",
+      "source_and_database_build"
+    ],
+    "forbidden_hermes_actions": [
+      "write_live_data_root",
+      "update_live_manifest",
+      "update_canonical_sources",
+      "update_approved_sources",
+      "update_capability_map",
+      "approve_promotion",
+      "claim_live_business_data",
+      "record_promotion_approval_before_codex_candidate_pass",
+      "treat_knowledge_source_upload_as_database_build"
+    ],
+    "hermes_allowed_actions": [
+      "collect_source_and_scope_fields",
+      "intake_source_files_without_shell",
+      "classify_source_kind_before_submission",
+      "classify_promotion_scope_before_submission",
+      "perform_preliminary_material_completeness_review",
+      "submit_or_describe_runtime_request_packet",
+      "withdraw_pending_request_by_owner_or_P3",
+      "amend_pending_request_by_owner_or_P3",
+      "route_to_codex_review"
+    ],
+    "human_required_actions": [
+      "approve_exact_source_set",
+      "approve_exact_data_family",
+      "approve_exact_promotion_scope",
+      "approve_promotion_packet",
+      "record_promotion_approval"
+    ],
+    "knowledge_source_upload_scope": "knowledge_source_upload",
+    "p3_approval_notification_action_id": "DISABLED_WE_COM_PUSH",
+    "p3_approval_request_action_id": "create_p3_approval_request",
+    "p3_approval_request_queue": "/Users/HY-yin/.hermes/profiles/compliance/p3_approval_requests/",
+    "promotion_approval_record_queue": "/Users/HY-yin/.hermes/profiles/compliance/promotion_approval_records/",
+    "promotion_scope_required_before_submit": true,
+    "record_promotion_approval_action_id": "record_promotion_approval",
+    "request_queue_write_rule": "promotion_request_queue_requires_submit_promotion_request_tool",
+    "runtime_request_queue": "/Users/HY-yin/.hermes/profiles/compliance/promotion_requests/",
+    "runtime_source_intake_root": "/Users/HY-yin/.hermes/profiles/compliance/workspace/source_intake/",
+    "source_intake_action_id": "intake_source_files",
+    "source_intake_minimum_role_id": "P1",
+    "source_kind_classification_required_before_submit": true,
+    "source_kind_rules": {
+      "customer_requirement": [
+        "customer_standard",
+        "customer_code_of_conduct",
+        "supplier_code_of_conduct",
+        "IWAY-like customer requirement pack"
+      ],
+      "legal_source": [
+        "law",
+        "regulation",
+        "statutory_requirement",
+        "legal_authority_standard"
+      ]
+    },
+    "submit_action_id": "submit_promotion_request",
+    "submit_minimum_role_id": "P1",
+    "temporary_candidate_artifact_root": "/Users/HY-yin/.hermes/profiles/compliance/workspace/promotion_artifacts/",
+    "wecom_approval_replies_valid": false,
+    "withdraw_action_id": "withdraw_promotion_request",
+    "withdraw_minimum_role_id": "P1"
+  },
+  "schema_version": "v1",
+  "source_task": "TASK-20260523-017",
+  "status": "accepted_runtime_contract",
+  "test_candidate_database_artifacts": [
+    "/Users/HY-yin/Documents/Codex-Compliance-System/artifacts/candidate/compliance_product_v1/",
+    "/Users/HY-yin/Documents/Codex-Compliance-System/artifacts/candidate/compliance_product_legacy_reset_v1/"
+  ]
+}

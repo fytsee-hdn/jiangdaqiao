@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/legal_original_text",
+  "title": "Legal Original Text",
+  "description": "Archived original legal text in its source language. Immutable. Never interpreted — interpretation lives in applicable_legal_standard.",
+  "type": "object",
+  "required": [
+    "id",
+    "country_code",
+    "law_name",
+    "article_ref",
+    "original_text",
+    "original_language"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2."
+    },
+    "law_name": {
+      "type": "string",
+      "description": "Official name of the law/regulation."
+    },
+    "law_code": {
+      "type": "string",
+      "description": "Official law code or number."
+    },
+    "article_ref": {
+      "type": "string",
+      "description": "Article, clause, or section reference."
+    },
+    "original_text": {
+      "type": "string",
+      "description": "IMMUTABLE verbatim legal text."
+    },
+    "original_language": {
+      "type": "string"
+    },
+    "official_source_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "amended_by": {
+      "type": "string",
+      "description": "Reference to amending legislation."
+    },
+    "repealed": {
+      "type": "boolean",
+      "default": false
+    },
+    "source_text_archive_id": {
+      "type": "string",
+      "description": "FK to source_text_archive.id."
+    },
+    "ingested_by": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

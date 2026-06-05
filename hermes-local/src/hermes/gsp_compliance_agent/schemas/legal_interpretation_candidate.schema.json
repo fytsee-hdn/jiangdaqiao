@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/legal_interpretation_candidate",
+  "title": "Legal Interpretation Candidate",
+  "description": "Interpreted form of a legal requirement — operational impact, GSP/checklist implications. Created during legal review. REMINDER: always a candidate until approved by qualified legal professional.",
+  "type": "object",
+  "required": [
+    "legal_interpretation_id",
+    "legal_requirement_id",
+    "country_code",
+    "interpretation_summary",
+    "review_status"
+  ],
+  "properties": {
+    "legal_interpretation_id": {
+      "type": "string",
+      "description": "Unique ID (e.g., LIN-VN-LABOUR-2019-01)."
+    },
+    "legal_requirement_id": {
+      "type": "string",
+      "description": "FK to applicable_legal_requirement.legal_requirement_id."
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "interpretation_summary": {
+      "type": "string",
+      "description": "Interpretation of the legal requirement."
+    },
+    "operational_impact_candidate": {
+      "type": "string",
+      "description": "Draft operational impact on facilities — candidate only."
+    },
+    "linked_gsp_standard_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Candidate links to GSP standard IDs."
+    },
+    "linked_checklist_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Candidate links to checklist item IDs."
+    },
+    "legal_review_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "legal_review_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "in_review",
+        "reviewed",
+        "disputed"
+      ],
+      "default": "pending"
+    },
+    "llm_reasoning_summary": {
+      "type": "string",
+      "description": "LLM reasoning for this interpretation."
+    },
+    "uncertainty_notes": {
+      "type": "string"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "draft_interpretation",
+        "legal_review_pending",
+        "legal_confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "default": "draft_interpretation"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "not_approved",
+        "reference_only",
+        "legal_confirmed"
+      ],
+      "default": "not_approved"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

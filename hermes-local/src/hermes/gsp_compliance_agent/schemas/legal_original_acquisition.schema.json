@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/legal_original_acquisition",
+  "title": "Legal Original Acquisition",
+  "description": "Tracks the acquisition process of official legal original text from government/legal sources. Each record represents one attempt to acquire the full original text of a law. Links law list/index entries to archived legal text.",
+  "type": "object",
+  "required": [
+    "acquisition_id",
+    "country_code",
+    "law_number",
+    "law_name_original",
+    "retrieval_status"
+  ],
+  "properties": {
+    "acquisition_id": {
+      "type": "string",
+      "description": "Unique acquisition record ID (e.g., ACQ-VN-001)."
+    },
+    "country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2."
+    },
+    "jurisdiction": {
+      "type": "string",
+      "description": "e.g., 'national', 'provincial'."
+    },
+    "law_number": {
+      "type": "string",
+      "description": "Official law number (e.g., '45/2019/QH14')."
+    },
+    "law_name_original": {
+      "type": "string",
+      "description": "Original language law name."
+    },
+    "law_name_en": {
+      "type": "string",
+      "description": "English translation (reference only)."
+    },
+    "source_candidate_url": {
+      "type": "string",
+      "description": "Initially identified source candidate URL."
+    },
+    "official_source_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Confirmed official source URL where text was obtained."
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "government_legal_database",
+        "ministry_portal",
+        "standards_portal",
+        "official_pdf_upload",
+        "user_provided_file",
+        "user_curated_index_reference_only",
+        "not_found"
+      ]
+    },
+    "source_confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low", "needs_verification"]
+    },
+    "retrieval_method": {
+      "type": "string",
+      "enum": [
+        "web_download",
+        "manual_upload",
+        "copied_text",
+        "mock_for_testing",
+        "not_retrieved"
+      ]
+    },
+    "retrieval_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "retrieval_status": {
+      "type": "string",
+      "enum": [
+        "source_search_pending",
+        "source_candidate_found",
+        "official_text_acquired_pending_archive",
+        "archived_pending_article_extraction",
+        "source_not_found",
+        "needs_user_upload",
+        "needs_source_verification",
+        "rejected"
+      ]
+    },
+    "downloaded_file_path": {
+      "type": "string",
+      "description": "Path to downloaded/copied file."
+    },
+    "copied_text_path": {
+      "type": "string",
+      "description": "Path to copied text (if not a file download)."
+    },
+    "content_hash": {
+      "type": "string",
+      "description": "SHA256 hash of retrieved text content."
+    },
+    "version_status": {
+      "type": "string",
+      "description": "e.g., 'original', 'amended_2023', 'consolidated'."
+    },
+    "effective_status": {
+      "type": "string",
+      "enum": ["effective", "not_yet_effective", "expired", "unknown"]
+    },
+    "amendment_status": {
+      "type": "string",
+      "enum": ["original", "amended", "replaced", "repealed", "unknown"]
+    },
+    "replacement_status": {
+      "type": "string",
+      "description": "If replaced, which law replaces it."
+    },
+    "needs_original_text": {
+      "type": "boolean",
+      "default": true,
+      "description": "True until original text is confirmed acquired."
+    },
+    "needs_source_verification": {
+      "type": "boolean",
+      "default": true,
+      "description": "True until source is verified as official."
+    },
+    "acquisition_notes": {
+      "type": "string"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "acquisition_pending",
+        "text_acquired",
+        "archived",
+        "user_upload_needed",
+        "rejected"
+      ],
+      "default": "acquisition_pending"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": ["not_approved", "reference_text_only"],
+      "default": "not_approved"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

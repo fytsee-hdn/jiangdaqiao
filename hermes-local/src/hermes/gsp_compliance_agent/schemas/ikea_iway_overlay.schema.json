@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/ikea_iway_overlay",
+  "title": "IKEA IWAY Overlay",
+  "description": "IKEA-specific overlay: tracks IWAY requirements, how they map to GSP Core Standard, and any IKEA-specific evidence or procedures.",
+  "type": "object",
+  "required": [
+    "id",
+    "iway_clause_ref",
+    "customer_req_id",
+    "core_requirement_id",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "iway_version": {
+      "type": "string",
+      "description": "IWAY standard version (e.g., 6.0)."
+    },
+    "iway_chapter": {
+      "type": "string"
+    },
+    "iway_clause_ref": {
+      "type": "string",
+      "description": "Canonical IWAY clause reference."
+    },
+    "iway_requirement_text": {
+      "type": "string"
+    },
+    "customer_req_id": {
+      "type": "string",
+      "description": "FK to customer_requirement_master.id."
+    },
+    "core_requirement_id": {
+      "type": "string",
+      "description": "FK to gsp_core_standard.id."
+    },
+    "mapping_id": {
+      "type": "string",
+      "description": "FK to customer_to_gsp_mapping.id."
+    },
+    "overlay_type": {
+      "type": "string",
+      "enum": [
+        "identical",
+        "iway_stricter",
+        "gsp_stricter",
+        "iway_additional",
+        "gsp_additional"
+      ]
+    },
+    "gap_notes": {
+      "type": "string"
+    },
+    "ikea_specific_evidence": {
+      "type": "string",
+      "description": "Evidence specifically required by IKEA."
+    },
+    "ikea_audit_frequency": {
+      "type": "string"
+    },
+    "ikea_scoring_weight": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "major",
+        "minor",
+        "observation"
+      ]
+    },
+    "last_ikea_audit_result": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "minor_nc",
+        "major_nc",
+        "critical_nc",
+        "not_audited"
+      ]
+    },
+    "last_ikea_audit_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

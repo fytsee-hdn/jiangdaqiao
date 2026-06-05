@@ -1,0 +1,14 @@
+profile: service
+purpose: service routing and profile orchestration
+allowed_entrypoints:
+  - service_api
+  - service_worker
+admin_capabilities: false
+may_inherit_admin: false
+contains_secrets: false
+runtime_profile_root: .hermes/profiles/service
+default_ocr_policy: shared_ocr
+allowed_actions:
+  - route_request
+  - inspect_business_status
+  - dispatch_profile_task

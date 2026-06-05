@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/legal_conflict_case",
+  "title": "Legal Conflict Case",
+  "description": "Tracks conflicts between customer requirements, country laws, and GSP core standards. Each conflict must be resolved with documented rationale.",
+  "type": "object",
+  "required": [
+    "id",
+    "conflict_type",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country code. Added in P9A for multi-country support."
+    },
+    "gsp_standard_id": {
+      "type": "string",
+      "description": "FK to gsp_core_standard.id. Added in P9A."
+    },
+    "customer_requirement_id": {
+      "type": "string",
+      "description": "FK to customer_requirement_master.id. Added in P9A."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "under_review",
+        "resolved",
+        "escalated",
+        "closed"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "conflict_type": {
+      "type": "string",
+      "enum": [
+        "customer_vs_core",
+        "country_vs_core",
+        "customer_vs_country",
+        "customer_vs_customer",
+        "country_vs_country",
+        "core_vs_internal_policy"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "party_a": {
+      "type": "object",
+      "required": [
+        "source_type",
+        "source_id"
+      ],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "customer_requirement",
+            "legal_standard",
+            "core_standard",
+            "internal_policy"
+          ]
+        },
+        "source_id": {
+          "type": "string"
+        },
+        "requirement_text": {
+          "type": "string"
+        }
+      }
+    },
+    "party_b": {
+      "type": "object",
+      "required": [
+        "source_type",
+        "source_id"
+      ],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "customer_requirement",
+            "legal_standard",
+            "core_standard",
+            "internal_policy"
+          ]
+        },
+        "source_id": {
+          "type": "string"
+        },
+        "requirement_text": {
+          "type": "string"
+        }
+      }
+    },
+    "conflict_description": {
+      "type": "string",
+      "description": "What exactly conflicts."
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "major",
+        "minor"
+      ]
+    },
+    "resolution_strategy": {
+      "type": "string",
+      "enum": [
+        "apply_stricter",
+        "apply_customer",
+        "apply_local_law",
+        "apply_core",
+        "create_exception",
+        "escalate_to_customer",
+        "escalate_to_legal",
+        "other"
+      ]
+    },
+    "resolution_rationale": {
+      "type": "string"
+    },
+    "resolution_approved_by": {
+      "type": "string"
+    },
+    "resolution_approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "escalated_to": {
+      "type": "string"
+    },
+    "escalated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "customer_acknowledged": {
+      "type": "boolean",
+      "default": false
+    },
+    "customer_ack_ref": {
+      "type": "string"
+    },
+    "stricter_party": {
+      "type": "string",
+      "description": "Which party has the stricter requirement. Added in P9A."
+    },
+    "needs_legal_review": {
+      "type": "boolean",
+      "default": true,
+      "description": "Added in P9A."
+    },
+    "legal_owner_decision": {
+      "type": "string",
+      "description": "Legal owner's final decision on this conflict. Added in P9A."
+    },
+    "affected_core_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "affected_overlay_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gsp-compliance/schemas/gsp_core_standard",
+  "title": "GSP Core Compliance Standard",
+  "description": "The single consolidated compliance standard. De-duplicated, synthesised from multiple customer and legal sources. Every overlay and work package links here. C5A adds derivation, traceability, and review/approval-status fields.",
+  "type": "object",
+  "required": [
+    "id",
+    "core_id",
+    "title",
+    "chapter",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "deprecated",
+        "superseded"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "core_id": {
+      "type": "string",
+      "description": "Stable short identifier (e.g., GSP-CORE-ENV-001)."
+    },
+    "gsp_standard_id": {
+      "type": "string",
+      "description": "C5A: Canonical GSP Standard ID in format GSP-COM-P<principle>-<domain>-<sequence> (e.g., GSP-COM-P06-SWM-001)."
+    },
+    "title": {
+      "type": "string"
+    },
+    "chapter": {
+      "type": "string",
+      "description": "Chapter or domain grouping."
+    },
+    "requirement_statement": {
+      "type": "string",
+      "description": "Consolidated actionable requirement in plain language."
+    },
+    "rationale": {
+      "type": "string"
+    },
+    "normative_force": {
+      "type": "string",
+      "enum": [
+        "shall",
+        "should",
+        "may"
+      ]
+    },
+    "domain_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_critical": {
+      "type": "boolean",
+      "default": false
+    },
+    "source_customer_requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "customer_req_id"
+        ],
+        "properties": {
+          "customer_req_id": {
+            "type": "string",
+            "description": "FK to customer_requirement_master.id."
+          },
+          "customer_code": {
+            "type": "string"
+          },
+          "clause_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_legal_requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "legal_standard_id": {
+            "type": "string",
+            "description": "FK to applicable_legal_standard.id."
+          },
+          "country_code": {
+            "type": "string"
+          },
+          "law_citation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "applies_to_all_facilities": {
+      "type": "boolean",
+      "default": true
+    },
+    "facility_country_overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "facility_code": {
+            "type": "string"
+          },
+          "country_code": {
+            "type": "string"
+          },
+          "override_type": {
+            "type": "string",
+            "enum": [
+              "stricter",
+              "additional",
+              "waived"
+            ]
+          },
+          "override_text": {
+            "type": "string"
+          },
+          "legal_basis": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "controlled_terms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "FK to controlled_term.id for standardised terminology used."
+    },
+    "has_customer_overlay": {
+      "type": "boolean",
+      "default": false
+    },
+    "has_country_overlay": {
+      "type": "boolean",
+      "default": false
+    },
+    "has_department_package": {
+      "type": "boolean",
+      "default": false
+    },
+    "last_audit_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "audit_findings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewed_by": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "approved_by": {
+          "type": "string"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    },
+
+    "gsp_principle": {
+      "type": "string",
+      "description": "C5A: GSP principle identifier (e.g., P06, PXX)."
+    },
+    "gsp_domain": {
+      "type": "string",
+      "description": "C5A: GSP domain code (e.g., SWM, OHS, WH, WB, FIRE, CHEM, WASTE, CL, LR, LEG, GOV, REV)."
+    },
+    "standard_language": {
+      "type": "string",
+      "description": "C5A: Language of the standard statement (e.g., en, zh, vi)."
+    },
+    "standard_derivation_method": {
+      "type": "string",
+      "enum": [
+        "copied_from_customer_requirement",
+        "interpreted_from_customer_requirement",
+        "localized_for_gsp_operation",
+        "split_from_customer_requirement",
+        "consolidated_from_multiple_requirements",
+        "execution_expanded_from_customer_requirement"
+      ],
+      "description": "C5A: How this GSP standard candidate was derived from source requirements."
+    },
+    "source_original_text_preserved": {
+      "type": "boolean",
+      "description": "C5A: Whether the original customer text is preserved verbatim in source_text_archive."
+    },
+    "source_customer_requirement_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "crm_id": {
+            "type": "string",
+            "description": "FK to customer_requirement_master.id."
+          },
+          "customer": {
+            "type": "string"
+          },
+          "standard_family": {
+            "type": "string"
+          },
+          "standard_version": {
+            "type": "string"
+          },
+          "clause_ref": {
+            "type": "string"
+          },
+          "original_text_excerpt": {
+            "type": "string"
+          },
+          "source_text_archive_id": {
+            "type": "string"
+          },
+          "mapping_type": {
+            "type": "string",
+            "enum": [
+              "one_to_one",
+              "one_customer_to_many_gsp",
+              "many_customer_to_one_gsp",
+              "partial_mapping",
+              "reference_only",
+              "needs_review"
+            ]
+          }
+        }
+      },
+      "description": "C5A: Detailed traceability links back to customer_requirement_master and source_text_archive."
+    },
+    "gsp_applicability": {
+      "type": "string",
+      "enum": [
+        "all_facilities",
+        "production_only",
+        "warehouse_only",
+        "office_only",
+        "specific_facilities"
+      ],
+      "description": "C5A: Which GSP facilities this standard applies to."
+    },
+    "gsp_owner_function": {
+      "type": "string",
+      "description": "C5A: Function accountable for this standard (e.g., HR, EHS, Production, QA)."
+    },
+    "gsp_responsible_departments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "C5A: Departments responsible for implementing this standard."
+    },
+    "gsp_required_controls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "C5A: High-level control requirements (standard level, not SOP)."
+    },
+    "legal_dependency": {
+      "type": "string",
+      "enum": [
+        "none",
+        "vn_law",
+        "cn_law",
+        "vn_and_cn_law",
+        "customer_contract_only",
+        "needs_legal_review"
+      ],
+      "description": "C5A: Whether this standard has legal dependency beyond customer requirement."
+    },
+    "gsp_gap_status": {
+      "type": "string",
+      "enum": [
+        "not_assessed",
+        "gap_identified",
+        "no_gap",
+        "gap_addressed"
+      ],
+      "description": "C5A: Gap analysis status against current GSP practice."
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "draft_pending_review",
+        "in_review",
+        "reviewed_pending_approval",
+        "rejected",
+        "needs_revision"
+      ],
+      "description": "C5A: Human review workflow status (separate from lifecycle status)."
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "not_approved",
+        "pending_approval",
+        "approved",
+        "rejected"
+      ],
+      "description": "C5A: Formal approval status. All C5A candidates are not_approved."
+    },
+    "derivation_batch_id": {
+      "type": "string",
+      "description": "C5A: Batch identifier linking candidates from the same derivation run."
+    },
+    "source_id": {
+      "type": "string",
+      "description": "C5A: FK to source_register.id (source document reference)."
+    },
+    "source_text_archive_id": {
+      "type": "string",
+      "description": "C5A: FK to source_text_archive.id (immutable original text)."
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,70 @@
+profile: compliance
+purpose: compliance source review and evidence drafting
+allowed_entrypoints:
+  - service_agent
+platform_toolsets:
+  wecom:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - compliance
+    - cronjob
+    - delegation
+    - file
+    - image_gen
+    - kanban
+    - messaging
+    - skills_readonly
+    - terminal
+    - todo
+    - tts
+    - vision
+    - web
+admin_capabilities: false
+may_inherit_admin: false
+contains_secrets: false
+runtime_profile_root: .hermes/profiles/compliance
+default_ocr_policy: compliance_ocr_extraction
+agent:
+  disabled_toolsets:
+    - memory
+    - session_search
+context:
+  soul_path: /Users/HY-yin/hermes-local/src/hermes/gsp_compliance_agent/prompts/soul.md
+  memory_seed_path: /Users/HY-yin/hermes-local/config/profiles/compliance_memory_seed.md
+memory:
+  memory_enabled: false
+  user_profile_enabled: false
+skills:
+  external_dirs:
+    - /Users/HY-yin/hermes-local/src/gsp_hermes/skills/compliance
+curator:
+  enabled: false
+allowed_actions:
+  - review_source
+  - extract_evidence
+  - draft_compliance_summary
+access_control:
+  messages:
+    unbound_denial: |
+      你的企业微信账号尚未绑定 Hermes compliance 权限角色（P0/P1/P2/P3），暂时无法使用此服务。
+      Your WeCom account is not bound to a Hermes compliance permission role (P0/P1/P2/P3), so this service is not available yet.
+
+      如需开通，请发送“申请权限”或“request access”。
+      To request access, send "申请权限" or "request access".
+    fail_closed_denial: |
+      权限模型无法读取或校验失败。根据 deny_by_default，当前请求已被拒绝。
+      The permission model could not be read or validated. Under deny_by_default, this request has been denied.
+
+      请联系管理员检查 hermes-local/config/profiles/compliance_permission_model.v1.json。
+      Please ask an administrator to check hermes-local/config/profiles/compliance_permission_model.v1.json.
+    request_submitted: |
+      权限申请已提交，等待管理员审批。
+      Your access request has been submitted and is pending administrator review.
+
+      申请账号 / WeCom ID: {wecom_user_id}
+      申请编号 / Request ID: {request_id}
+  request_intent_examples:
+    - 申请权限
+    - request access

@@ -1,0 +1,460 @@
+{
+  "artifact_type": "task10_permission_model",
+  "version": "v1",
+  "status": "candidate",
+  "task_id": "TASK-20260523-010",
+  "stage": "10.1",
+  "allowed_result_statuses": [
+    "BLOCKED",
+    "FAILED",
+    "CANDIDATE_PASS"
+  ],
+  "result_status": "CANDIDATE_PASS",
+  "schemas": {
+    "role": "schemas/access_control/role.schema.json",
+    "wecom_account_binding": "schemas/access_control/wecom_account_binding.schema.json",
+    "protected_action": "schemas/access_control/protected_action.schema.json"
+  },
+  "deny_by_default": true,
+  "unknown_account_decision": "BLOCKED",
+  "unknown_role_decision": "BLOCKED",
+  "unknown_action_decision": "BLOCKED",
+  "role_order": [
+    "P0",
+    "P1",
+    "P2",
+    "P3"
+  ],
+  "roles": [
+    {
+      "role_id": "P0",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "display_name": "Viewer",
+      "role_level": 0,
+      "inherits_from": [],
+      "allowed_action_ids": [
+        "query_candidate_read"
+      ],
+      "denied_action_ids": [
+        "intake_source_files",
+        "submit_update_request",
+        "submit_promotion_request",
+        "withdraw_promotion_request",
+        "amend_promotion_request",
+        "create_p3_approval_request",
+        "send_p3_approval_notification",
+        "record_promotion_approval",
+        "approve_task_execution",
+        "approve_promotion",
+        "admin_permission_change"
+      ],
+      "approval_authority": {
+        "can_approve_execution": false,
+        "can_approve_promotion": false,
+        "can_approve_go_live": false
+      },
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    },
+    {
+      "role_id": "P1",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "display_name": "Operator",
+      "role_level": 1,
+      "inherits_from": [
+        "P0"
+      ],
+      "allowed_action_ids": [
+        "intake_source_files",
+        "submit_update_request",
+        "submit_promotion_request",
+        "withdraw_promotion_request",
+        "amend_promotion_request"
+      ],
+      "denied_action_ids": [
+        "create_p3_approval_request",
+        "send_p3_approval_notification",
+        "record_promotion_approval",
+        "approve_task_execution",
+        "approve_promotion",
+        "admin_permission_change"
+      ],
+      "approval_authority": {
+        "can_approve_execution": false,
+        "can_approve_promotion": false,
+        "can_approve_go_live": false
+      },
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    },
+    {
+      "role_id": "P2",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "display_name": "Reviewer",
+      "role_level": 2,
+      "inherits_from": [
+        "P1"
+      ],
+      "allowed_action_ids": [
+        "approve_task_execution"
+      ],
+      "denied_action_ids": [
+        "create_p3_approval_request",
+        "send_p3_approval_notification",
+        "record_promotion_approval",
+        "approve_promotion",
+        "admin_permission_change"
+      ],
+      "approval_authority": {
+        "can_approve_execution": true,
+        "can_approve_promotion": false,
+        "can_approve_go_live": false
+      },
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    },
+    {
+      "role_id": "P3",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "display_name": "Owner",
+      "role_level": 3,
+      "inherits_from": [
+        "P2"
+      ],
+      "allowed_action_ids": [
+        "create_p3_approval_request",
+        "send_p3_approval_notification",
+        "record_promotion_approval",
+        "approve_promotion",
+        "admin_permission_change"
+      ],
+      "denied_action_ids": [],
+      "approval_authority": {
+        "can_approve_execution": true,
+        "can_approve_promotion": true,
+        "can_approve_go_live": true
+      },
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    }
+  ],
+  "wecom_account_bindings": [
+    {
+      "binding_id": "wecom_binding_hy_yin_owner_20260523",
+      "schema_version": "v1",
+      "lifecycle_status": "active",
+      "wecom_user_id": "wonmcgBwAAs99xmj5ydBwM9DKx91AaqQ",
+      "internal_user_id": "hy_yin_owner",
+      "assigned_role_id": "P3",
+      "binding_status": "active",
+      "conflict_policy": "block_duplicate_wecom_user",
+      "source_ref": {
+        "record_type": "wecom_access_request",
+        "record_id": "wecom-access-wonmcgBwAAs99xmj5ydBwM9DKx91AaqQ-2026-05-23T11:33:51.919658+00:00"
+      },
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    },
+    {
+      "binding_id": "wecom_binding_compliance_reviewer_20260526",
+      "schema_version": "v1",
+      "lifecycle_status": "active",
+      "wecom_user_id": "wonmcgBwAAfjMCIyYu7jtTu5ov6DeohA",
+      "internal_user_id": "compliance_reviewer_20260526",
+      "assigned_role_id": "P2",
+      "binding_status": "active",
+      "conflict_policy": "block_duplicate_wecom_user",
+      "source_ref": {
+        "record_type": "wecom_access_request",
+        "record_id": "wecom-access-wonmcgBwAAfjMCIyYu7jtTu5ov6DeohA-2026-05-26T01:32:10.994922+00:00"
+      },
+      "created_at": "2026-05-26",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "binding_id": "wecom_binding_compliance_reviewer_20260526_02",
+      "schema_version": "v1",
+      "lifecycle_status": "active",
+      "wecom_user_id": "wonmcgBwAAh7igsFAAZOM_Lhno9KrboQ",
+      "internal_user_id": "compliance_reviewer_20260526_02",
+      "assigned_role_id": "P2",
+      "binding_status": "active",
+      "conflict_policy": "block_duplicate_wecom_user",
+      "source_ref": {
+        "record_type": "wecom_access_request",
+        "record_id": "wecom-access-wonmcgBwAAh7igsFAAZOM_Lhno9KrboQ-2026-05-26T01:37:00.953114+00:00"
+      },
+      "created_at": "2026-05-26",
+      "updated_at": "2026-05-26"
+    }
+  ],
+  "protected_actions": [
+    {
+      "action_id": "query_candidate_read",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "query",
+      "description": "Read candidate-only indexed information through gateway.",
+      "minimum_role_id": "P0",
+      "requires_human_approval": false,
+      "requires_source_hash": false,
+      "requires_validator": true,
+      "allowed_tool_ids": [
+        "gateway.query_candidate"
+      ],
+      "forbidden_paths": [
+        "artifacts/accepted/",
+        ".hermes/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    },
+    {
+      "action_id": "submit_update_request",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "update_request",
+      "description": "Submit candidate-only update request for later review.",
+      "minimum_role_id": "P1",
+      "requires_human_approval": false,
+      "requires_source_hash": true,
+      "requires_validator": true,
+      "allowed_tool_ids": [
+        "gateway.submit_update_request"
+      ],
+      "forbidden_paths": [
+        "artifacts/accepted/",
+        ".hermes/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    },
+    {
+      "action_id": "intake_source_files",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "source_intake",
+      "description": "Copy or extract source files into the controlled runtime intake workspace and calculate hashes; this does not promote or write live data.",
+      "minimum_role_id": "P1",
+      "requires_human_approval": false,
+      "requires_source_hash": false,
+      "requires_validator": false,
+      "allowed_tool_ids": [
+        "gateway.intake_source_files"
+      ],
+      "forbidden_paths": [
+        "artifacts/accepted/",
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-25",
+      "updated_at": "2026-05-25"
+    },
+    {
+      "action_id": "submit_promotion_request",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "promotion_request",
+      "description": "Submit a runtime live-data promotion request packet for Codex verification; this does not approve or perform promotion.",
+      "minimum_role_id": "P1",
+      "requires_human_approval": false,
+      "requires_source_hash": true,
+      "requires_validator": false,
+      "allowed_tool_ids": [
+        "gateway.submit_promotion_request"
+      ],
+      "forbidden_paths": [
+        "artifacts/accepted/",
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-24",
+      "updated_at": "2026-05-24"
+    },
+    {
+      "action_id": "withdraw_promotion_request",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "promotion_request_lifecycle",
+      "description": "Withdraw a pending runtime promotion request owned by the requester, or by P3 owner override; this does not approve, reject, or perform promotion.",
+      "minimum_role_id": "P1",
+      "requires_human_approval": false,
+      "requires_source_hash": false,
+      "requires_validator": false,
+      "allowed_tool_ids": [
+        "gateway.withdraw_promotion_request"
+      ],
+      "forbidden_paths": [
+        "artifacts/accepted/",
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-25",
+      "updated_at": "2026-05-25"
+    },
+    {
+      "action_id": "amend_promotion_request",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "promotion_request_lifecycle",
+      "description": "Create an amended runtime promotion request and supersede the earlier active request; this does not approve or perform promotion.",
+      "minimum_role_id": "P1",
+      "requires_human_approval": false,
+      "requires_source_hash": true,
+      "requires_validator": false,
+      "allowed_tool_ids": [
+        "gateway.amend_promotion_request"
+      ],
+      "forbidden_paths": [
+        "artifacts/accepted/",
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-25",
+      "updated_at": "2026-05-25"
+    },
+    {
+      "action_id": "create_p3_approval_request",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "approval_notification",
+      "description": "Create a scoped P3 approval request packet after Codex CANDIDATE_PASS review; this does not approve or perform promotion.",
+      "minimum_role_id": "P3",
+      "requires_human_approval": false,
+      "requires_source_hash": true,
+      "requires_validator": true,
+      "allowed_tool_ids": [
+        "gateway.create_p3_approval_request"
+      ],
+      "forbidden_paths": [
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-25",
+      "updated_at": "2026-05-25"
+    },
+    {
+      "action_id": "send_p3_approval_notification",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "approval_notification",
+      "description": "Send or resend a queued scoped P3 approval request notification to bound P3 WeCom accounts; this does not approve or perform promotion.",
+      "minimum_role_id": "P3",
+      "requires_human_approval": false,
+      "requires_source_hash": true,
+      "requires_validator": true,
+      "allowed_tool_ids": [
+        "gateway.send_p3_approval_notification"
+      ],
+      "forbidden_paths": [
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-25",
+      "updated_at": "2026-05-25"
+    },
+    {
+      "action_id": "record_promotion_approval",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "approval",
+      "description": "Record a scoped P3 human decision for a promotion approval request; this does not perform promotion or write live data.",
+      "minimum_role_id": "P3",
+      "requires_human_approval": true,
+      "requires_source_hash": true,
+      "requires_validator": true,
+      "allowed_tool_ids": [
+        "gateway.record_promotion_approval"
+      ],
+      "forbidden_paths": [
+        "/Users/HY-yin/hermes-local/data/knowledge/compliance/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-25",
+      "updated_at": "2026-05-25"
+    },
+    {
+      "action_id": "approve_task_execution",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "approval",
+      "description": "Record human approval to execute a workflow task.",
+      "minimum_role_id": "P2",
+      "requires_human_approval": true,
+      "requires_source_hash": false,
+      "requires_validator": true,
+      "allowed_tool_ids": [
+        "gateway.record_task_approval"
+      ],
+      "forbidden_paths": [
+        "artifacts/accepted/",
+        ".hermes/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    },
+    {
+      "action_id": "approve_promotion",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "approval",
+      "description": "Record scoped human promotion approval after validator evidence.",
+      "minimum_role_id": "P3",
+      "requires_human_approval": true,
+      "requires_source_hash": true,
+      "requires_validator": true,
+      "allowed_tool_ids": [
+        "gateway.record_promotion_approval"
+      ],
+      "forbidden_paths": [
+        ".hermes/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    },
+    {
+      "action_id": "admin_permission_change",
+      "schema_version": "v1",
+      "lifecycle_status": "candidate",
+      "category": "admin",
+      "description": "Change role, account binding, or protected action definitions.",
+      "minimum_role_id": "P3",
+      "requires_human_approval": true,
+      "requires_source_hash": false,
+      "requires_validator": true,
+      "allowed_tool_ids": [
+        "gateway.admin_permission_change"
+      ],
+      "forbidden_paths": [
+        "artifacts/accepted/",
+        ".hermes/"
+      ],
+      "default_decision": "DENY",
+      "created_at": "2026-05-23",
+      "updated_at": "2026-05-23"
+    }
+  ],
+  "decision_tests": [
+    {
+      "case_id": "unknown_account_blocks",
+      "wecom_user_id": "unbound_wecom_user",
+      "action_id": "query_candidate_read",
+      "expected_decision": "BLOCKED"
+    }
+  ],
+  "forbidden_flags": {
+    "accepted_output_created": false,
+    "source_promotion_performed": false,
+    "canonical_write_performed": false,
+    "hermes_runtime_mutated": false,
+    "business_conclusion_made": false
+  }
+}

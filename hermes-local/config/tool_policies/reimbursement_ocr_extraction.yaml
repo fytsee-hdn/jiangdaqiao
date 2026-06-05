@@ -1,0 +1,15 @@
+policy_id: reimbursement_ocr_extraction
+policy_type: ocr_extraction
+profile: reimbursement
+required_fields:
+  - invoice_number
+  - amount
+  - vendor
+  - date
+  - tax_id
+  - currency
+  - expense_category
+  - reimbursement_reason
+redaction_rules:
+  - do_not_log_raw_document_text
+  - do_not_store_secret_tokens

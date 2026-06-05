@@ -1,0 +1,127 @@
+{
+  "version": "1.0.0",
+  "description": "Per-country legal source priority rules for official legal text acquisition.",
+  "defaults": {
+    "preferred_sources": [
+      "government_legal_database",
+      "ministry_portal",
+      "standards_portal",
+      "official_pdf_upload",
+      "user_provided_file"
+    ],
+    "allowed_source_types": [
+      "law", "decree", "circular", "technical_regulation",
+      "standard", "official_guidance"
+    ],
+    "fallback_rules": {
+      "if_official_source_unavailable": "mark_needs_user_upload",
+      "if_only_curated_index_available": "mark_index_only_draft_mode",
+      "index_only_output_flags": {
+        "index_only_analysis": true,
+        "needs_original_text": true,
+        "needs_legal_review": true
+      }
+    },
+    "source_confidence_rules": {
+      "government_legal_database": "high",
+      "ministry_portal": "high",
+      "standards_portal": "high",
+      "official_pdf_upload": "medium",
+      "user_provided_file": "medium",
+      "non_official_website": "low",
+      "user_curated_index": "low"
+    }
+  },
+  "per_country": {
+    "VN": {
+      "country_code": "VN",
+      "country_name": "Vietnam",
+      "preferred_sources": [
+        {
+          "name": "thuvienphapluat.vn",
+          "type": "government_legal_database",
+          "url_template": "https://thuvienphapluat.vn/",
+          "confidence": "high",
+          "notes": "National official legal database"
+        },
+        {
+          "name": "vanban.chinhphu.vn",
+          "type": "government_legal_database",
+          "url_template": "https://vanban.chinhphu.vn/",
+          "confidence": "high",
+          "notes": "Government portal"
+        },
+        {
+          "name": "moj.gov.vn",
+          "type": "ministry_portal",
+          "confidence": "high",
+          "notes": "Ministry of Justice"
+        },
+        {
+          "name": "molisa.gov.vn",
+          "type": "ministry_portal",
+          "confidence": "high",
+          "notes": "Ministry of Labour"
+        },
+        {
+          "name": "tcvn.gov.vn",
+          "type": "standards_portal",
+          "confidence": "high",
+          "notes": "Vietnam standards portal"
+        },
+        {
+          "name": "vsqi.gov.vn",
+          "type": "standards_portal",
+          "confidence": "high",
+          "notes": "Vietnam Standards and Quality Institute"
+        }
+      ],
+      "allowed_source_types": [
+        "law", "decree", "circular", "technical_regulation",
+        "standard", "official_guidance"
+      ],
+      "fallback_rules": {
+        "if_official_source_unavailable": "mark_needs_user_upload",
+        "if_only_curated_index_available": "mark_index_only_draft_mode",
+        "index_only_output_flags": {
+          "index_only_analysis": true,
+          "needs_original_text": true,
+          "needs_legal_review": true
+        }
+      },
+      "source_confidence_rules": {
+        "government_legal_database": "high",
+        "ministry_portal": "high",
+        "standards_portal": "high",
+        "official_pdf_upload": "medium",
+        "user_provided_file": "medium",
+        "non_official_website": "low",
+        "user_curated_index": "low"
+      },
+      "notes": "Vietnam legal sources follow a hierarchy: National Assembly laws > Government decrees > Ministry circulars > Provincial regulations."
+    },
+    "CN": {
+      "country_code": "CN",
+      "country_name": "China",
+      "preferred_sources": [
+        {
+          "name": "flk.npc.gov.cn",
+          "type": "government_legal_database",
+          "confidence": "high",
+          "notes": "National People's Congress legal database"
+        }
+      ],
+      "allowed_source_types": ["law", "regulation", "standard", "guidance"],
+      "fallback_rules": {
+        "if_official_source_unavailable": "mark_needs_user_upload",
+        "if_only_curated_index_available": "mark_index_only_draft_mode",
+        "index_only_output_flags": {
+          "index_only_analysis": true,
+          "needs_original_text": true,
+          "needs_legal_review": true
+        }
+      },
+      "notes": "Placeholder for China legal sources. Update when China legal workflow starts."
+    }
+  }
+}
